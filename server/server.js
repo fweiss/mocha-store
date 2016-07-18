@@ -9,7 +9,8 @@ app.post('/orders', function(req, res) {
         {
             id : 1,
             drink: req.body.order.drink,
-            cost: 3
+            cost: 3,
+            next: { }
         }
     }
     res.status(201);

@@ -11,6 +11,7 @@ describe('coffee store', function() {
             expect(res.body.order.id).to.equal(1);
             expect(res.body.order.drink).to.equal('americano');
             expect(res.body.order.cost).to.equal(3);
+            expect(res.body.order.next).to.exist;
             done();
         });
     });
