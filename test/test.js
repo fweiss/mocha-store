@@ -8,8 +8,9 @@ describe('coffee store', function() {
         api.post('/orders').send(order).end(function(err, res) {
             expect(err).to.not.exist;
             expect(res.status).to.equal(201);
-            expect(res.body.order.drink).to.equal('americano');
             expect(res.body.order.id).to.equal(1);
+            expect(res.body.order.drink).to.equal('americano');
+            expect(res.body.order.cost).to.equal(3);
             done();
         });
     });
