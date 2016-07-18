@@ -1,4 +1,3 @@
-//var chai = require('chai');
 var expect = require('chai').expect;
 var request = require('supertest');
 
@@ -9,6 +8,7 @@ describe('coffee', function() {
             expect(err).to.not.exist;
             expect(res.status).to.equal(201);
             expect(res.body.order.drink).to.equal('latte');
+            expect(res.body.order.id).to.equal(1);
             done();
         });
     });
