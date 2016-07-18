@@ -5,11 +5,11 @@ var request = require('supertest');
 describe('coffee', function() {
     var server = 'http://localhost:8001';
     it('is ready', function(done) {
-        request(server).post('/order').send().end(function(err, res) {
+        request(server).post('/orders').send().expect(201).end(function(err, res) {
             if (err) {
                 throw err;
             }
-            expect(true).to.equal(true);
+            expect(res.body.order.drink).to.equal('latte');
             done();
         });
     });
