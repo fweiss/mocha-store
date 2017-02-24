@@ -15,21 +15,9 @@ describe('coffee store', function() {
 
     describe('orders', function() {
         describe('create', function() {
-            it('can order americano new', function(done) {
-                var newOrder = { order: { drink: 'americano' } };
-                postWrapper('/orders', newOrder, 201, function(res) {
-                    expect(res.body.order.id).to.equal(1);
-                    expect(res.body.order.drink).to.equal('americano');
-                    expect(res.body.order.cost).to.equal(3);
-                    expect(res.body.order.next).to.exist;
-                    done();
-                });
-            });
-            it('can order americano', function(done) {
+             it('can order americano', function(done) {
                 var order = { order: { drink: 'americano' } };
-                api.post('/orders').send(order).end(function(err, res) {
-                    expect(err).to.not.exist;
-                    expect(res.status).to.equal(201);
+                postWrapper('/orders', order, 201, function(res) {
                     expect(res.body.order.id).to.equal(1);
                     expect(res.body.order.drink).to.equal('americano');
                     expect(res.body.order.cost).to.equal(3);
@@ -39,18 +27,14 @@ describe('coffee store', function() {
             });
             it('can order latte', function(done) {
                 var order = { order: { drink: 'latte' } };
-                api.post('/orders').send(order).end(function(err, res) {
-                    expect(err).to.not.exist;
-                    expect(res.status).to.equal(201);
+                postWrapper('/orders', order, 201, function(res) {
                     expect(res.body.order.drink).to.equal('latte');
                     done();
                 });
             });
             it('has hypermedia link', function(done) {
                 var order = { order: { drink: 'latte' } };
-                api.post('/orders').send(order).end(function(err, res) {
-                    expect(err).to.not.exist;
-                    expect(res.status).to.equal(201);
+                postWrapper('/orders', order, 201, function(res) {
                     expect(res.body.order.next).to.exist;
                     expect(res.body.order.next.rel).to.equal('payment');
                     expect(res.body.order.next.href).to.equal('http://localhost:8001/payment/order/1');
