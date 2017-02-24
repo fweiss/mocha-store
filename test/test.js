@@ -5,8 +5,26 @@ describe('coffee store', function() {
     //var api = request('http://localhost:8001');
     var api = request(require('../server/store-app')());
 
+    function postWrapper(resource, entity, expectedStatus, callback) {
+        api.post(resource).send(entity).end(function(err, res) {
+            expect(err).to.not.exist;
+            expect(res.status).to.equal(expectedStatus);
+            callback(res);
+        });
+    }
+
     describe('orders', function() {
         describe('create', function() {
+            it('can order americano new', function(done) {
+                var newOrder = { order: { drink: 'americano' } };
+                postWrapper('/orders', newOrder, 201, function(res) {
+                    expect(res.body.order.id).to.equal(1);
+                    expect(res.body.order.drink).to.equal('americano');
+                    expect(res.body.order.cost).to.equal(3);
+                    expect(res.body.order.next).to.exist;
+                    done();
+                });
+            });
             it('can order americano', function(done) {
                 var order = { order: { drink: 'americano' } };
                 api.post('/orders').send(order).end(function(err, res) {
