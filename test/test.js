@@ -2,7 +2,8 @@ var expect = require('chai').expect;
 var request = require('supertest');
 
 describe('coffee store', function() {
-    var api = request('http://localhost:8001');
+    //var api = request('http://localhost:8001');
+    var api = request(require('../server/store-app')());
 
     describe('orders', function() {
         describe('create', function() {
