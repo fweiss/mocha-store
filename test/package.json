@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "npm update",
-    "test": "node node_modules/mocha/bin/_mocha --ui bdd --reporter spec test-poc"
+    "test": "node node_modules/mocha/bin/_mocha --ui bdd --reporter spec test"
   },
   "author": "feweiss@gmail.com",
   "license": "MIT",
