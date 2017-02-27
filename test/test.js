@@ -15,7 +15,7 @@ describe('coffee store', function() {
 
     describe('orders', function() {
         describe('create', function() {
-             it('can order americano', function(done) {
+            it('can order americano', function(done) {
                 var order = { order: { drink: 'americano' } };
                 postWrapper('/orders', order, 201, function(res) {
                     expect(res.body.order.id).to.equal(1);
@@ -44,6 +44,18 @@ describe('coffee store', function() {
             });
          });
         describe('modify', function() {
+            describe('validation', function() {
+                it('requires order', function(done) {
+                    api.put('/orders/1').send({ notorder: {} }).end(function(err, res) {
+                        expect(err).to.not.exist;
+                        expect(res.status).to.equal(400);
+                        expect(res.body).to.exist;
+                        expect(res.body.error).to.exist;
+                        expect(res.body.error.message).to.equal('Expected an "order" object');
+                        done();
+                    });
+                });
+            });
             it('can query existence', function(done) {
                 api.options('/orders/1').send().end(function(err, res) {
                     expect(err).to.not.exist;
@@ -63,6 +75,30 @@ describe('coffee store', function() {
                 });
             });
         });
+    });
+    describe('payment', function() {
+        describe('for order', function() {
+            it('describes actions', function(done) {
+                api.options('/payments/orders/1').send().end(function(err, res) {
+                    expect(err).to.not.exist;
+                    expect(res.status).to.equal(200);
+                    expect(res.headers['allow']).to.exist;
+                    expect(res.headers['allow']).to.equal('GET, PUT');
+                    done();
+                });
+            });
+            xit('can be made', function(done) {
+                var payment = { payment: { cardNumber: '123456', expirationDate: '11/20', cardholderName: 'John Doe'  }};
+                api.put('/orders/1').send(payment).set('Expect', '100-Continue').end(function(err, res) {
+                    expect(err).to.not.exist;
+                    //expect(res.status).to.equal(200);
+                    expect(res.body.order.additions).to.equal('tor');
+                    done();
+                });
+
+            });
+        });
+
     });
 
 

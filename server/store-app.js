@@ -31,9 +31,19 @@ module.exports = function() {
     });
 
     app.put('/orders/1', function(req, res) {
+        if (! req.body.order) {
+            res.status(400);
+            res.send({ error: { message: 'Expected an "order" object'}});
+            return;
+        }
         var order = _.extend({}, orderTemplate, { additions: req.body.order.additions });
         res.status(200);
         res.send({ order: order });
+    });
+    app.options('/payments/orders/:orderId', function(req, res) {
+        res.status(200);
+        res.append('allow', 'GET, PUT');
+        res.end('');
     });
 
     return app;
