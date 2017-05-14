@@ -45,6 +45,10 @@ module.exports = function() {
         res.append('allow', 'GET, PUT');
         res.end('');
     });
+    app.put('/payments/orders/1', function(req, res) {
+        res.status(201);
+        res.send({ payment: {amount: 4.40 } });
+    });
 
     return app;
 };
