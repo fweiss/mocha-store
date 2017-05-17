@@ -97,17 +97,11 @@ describe('coffee store', function() {
             });
             it('can be made', function(done) {
                 var payment = { payment: { cardNumber: '123456', expirationDate: '11/20', cardholderName: 'John Doe', amount: 4.40 }};
-                api.put('/payments/orders/1').send(payment).end(function(err, res) {
-                    expect(err).to.equal(null);
-                    expect(res.status).to.equal(201);
-                    expect(res.body.payment.amount).to.equal(4.40);
+                apiPut('/payments/orders/1', payment, 201, function(res) {
+                     expect(res.body.payment.amount).to.equal(4.40);
                     done();
                 });
-
             });
         });
-
     });
-
-
  });
