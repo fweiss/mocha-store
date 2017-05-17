@@ -29,7 +29,7 @@ describe('coffee store', function() {
 
     describe('order', function() {
         describe('create', function() {
-            it('can order americano', function(done) {
+            it('for americano', function(done) {
                 var order = { order: { drink: 'americano' } };
                 apiPost('/orders', order, 201, function(res) {
                     expect(res.body.order.id).to.equal(1);
@@ -39,7 +39,7 @@ describe('coffee store', function() {
                     done();
                 });
             });
-            it('can order latte', function(done) {
+            it('for latte', function(done) {
                 var order = { order: { drink: 'latte' } };
                 apiPost('/orders', order, 201, function(res) {
                     expect(res.body.order.drink).to.equal('latte');
