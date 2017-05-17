@@ -19,6 +19,13 @@ describe('coffee store', function() {
             callback(res);
         });
     }
+    function apiPut(resource, data, expectedStatus, callback) {
+        api.put(resource).send(data).end(function(err, res) {
+            expect(err).to.equal(null);
+            expect(res.status).to.equal(expectedStatus);
+            callback(res);
+        });
+    }
 
     describe('order', function() {
         describe('create', function() {
@@ -49,13 +56,11 @@ describe('coffee store', function() {
                     done();
                 });
             });
-         });
+        });
         describe('modify', function() {
             describe('validation', function() {
                 it('requires order', function(done) {
-                    api.put('/orders/1').send({ notorder: {} }).end(function(err, res) {
-                        expect(err).to.equal(null);
-                        expect(res.status).to.equal(400);
+                    apiPut('/orders/1', { notorder: {} }, 400, function(res) {
                         expect(res.body).to.be.ok();
                         expect(res.body.error).to.be.ok();
                         expect(res.body.error.message).to.equal('Expected an "order" object');
