@@ -7,7 +7,7 @@ describe('coffee store', function() {
 
     function postWrapper(resource, entity, expectedStatus, callback) {
         api.post(resource).send(entity).end(function(err, res) {
-            expect(err).to.not.exist;
+            expect(err).to.equal(null);
             expect(res.status).to.equal(expectedStatus);
             callback(res);
         });
@@ -21,7 +21,7 @@ describe('coffee store', function() {
                     expect(res.body.order.id).to.equal(1);
                     expect(res.body.order.drink).to.equal('americano');
                     expect(res.body.order.cost).to.equal(3);
-                    expect(res.body.order.next).to.exist;
+                    expect(res.body.order.next).to.not.equal(null);
                     done();
                 });
             });
@@ -35,7 +35,7 @@ describe('coffee store', function() {
             it('has hypermedia link', function(done) {
                 var order = { order: { drink: 'latte' } };
                 postWrapper('/orders', order, 201, function(res) {
-                    expect(res.body.order.next).to.exist;
+                    expect(res.body.order.next).to.not.equal(null);
                     expect(res.body.order.next.rel).to.equal('payment');
                     expect(res.body.order.next.href).to.equal('http://localhost:8001/payment/order/1');
                     expect(res.body.order.next.type).to.equal('application/json');
@@ -47,10 +47,10 @@ describe('coffee store', function() {
             describe('validation', function() {
                 it('requires order', function(done) {
                     api.put('/orders/1').send({ notorder: {} }).end(function(err, res) {
-                        expect(err).to.not.exist;
+                        expect(err).to.equal(null);
                         expect(res.status).to.equal(400);
-                        expect(res.body).to.exist;
-                        expect(res.body.error).to.exist;
+                        expect(res.body).to.not.equal(null);
+                        expect(res.body.error).to.not.equal(null);
                         expect(res.body.error.message).to.equal('Expected an "order" object');
                         done();
                     });
@@ -58,9 +58,9 @@ describe('coffee store', function() {
             });
             it('can query existence', function(done) {
                 api.options('/orders/1').send().end(function(err, res) {
-                    expect(err).to.not.exist;
+                    expect(err).to.equal(null);
                     expect(res.status).to.equal(200);
-                    expect(res.headers['allow']).to.exist;
+                    expect(res.headers['allow']).to.not.equal(null);
                     expect(res.headers['allow']).to.equal('GET, PUT');
                     done();
                 });
@@ -68,7 +68,7 @@ describe('coffee store', function() {
             it('can add shot', function(done) {
                 var partialOrder = { order: { additions: 'tor' }};
                 api.put('/orders/1').send(partialOrder).set('Expect', '100-Continue').end(function(err, res) {
-                    expect(err).to.not.exist;
+                    expect(err).to.equal(null);
                     expect(res.status).to.equal(200);
                     expect(res.body.order.additions).to.equal('tor');
                     done();
@@ -80,9 +80,9 @@ describe('coffee store', function() {
         describe('for order', function() {
             it('describes actions', function(done) {
                 api.options('/payments/orders/1').send().end(function(err, res) {
-                    expect(err).to.not.exist;
+                    expect(err).to.equal(null);
                     expect(res.status).to.equal(200);
-                    expect(res.headers['allow']).to.exist;
+                    expect(res.headers['allow']).to.not.equal(null);
                     expect(res.headers['allow']).to.equal('GET, PUT');
                     done();
                 });
@@ -90,7 +90,7 @@ describe('coffee store', function() {
             it('can be made', function(done) {
                 var payment = { payment: { cardNumber: '123456', expirationDate: '11/20', cardholderName: 'John Doe', amount: 4.40 }};
                 api.put('/payments/orders/1').send(payment).end(function(err, res) {
-                    expect(err).to.not.exist;
+                    expect(err).to.equal(null);
                     expect(res.status).to.equal(201);
                     expect(res.body.payment.amount).to.equal(4.40);
                     done();
