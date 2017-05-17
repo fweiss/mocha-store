@@ -54,6 +54,8 @@ assertions on null and undefined. I want to stick with expect(v) approach.
 
 Hmm, there are two shouldjs libraries?
 
+### Other assert libraries
 
+#### https://github.com/Automattic/expect.js
 
-
+This one is recommended by mocha, uses expect style, dot chaining, but not getter assertions.

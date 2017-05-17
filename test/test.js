@@ -1,4 +1,4 @@
-var expect = require('chai').expect;
+var expect = require('expect.js');
 var request = require('supertest');
 
 describe('coffee store', function() {
@@ -21,7 +21,7 @@ describe('coffee store', function() {
                     expect(res.body.order.id).to.equal(1);
                     expect(res.body.order.drink).to.equal('americano');
                     expect(res.body.order.cost).to.equal(3);
-                    expect(res.body.order.next).to.not.equal(null);
+                    expect(res.body.order.next).to.be.ok();
                     done();
                 });
             });
@@ -35,7 +35,7 @@ describe('coffee store', function() {
             it('has hypermedia link', function(done) {
                 var order = { order: { drink: 'latte' } };
                 postWrapper('/orders', order, 201, function(res) {
-                    expect(res.body.order.next).to.not.equal(null);
+                    expect(res.body.order.next).to.be.ok();
                     expect(res.body.order.next.rel).to.equal('payment');
                     expect(res.body.order.next.href).to.equal('http://localhost:8001/payment/order/1');
                     expect(res.body.order.next.type).to.equal('application/json');
@@ -49,8 +49,8 @@ describe('coffee store', function() {
                     api.put('/orders/1').send({ notorder: {} }).end(function(err, res) {
                         expect(err).to.equal(null);
                         expect(res.status).to.equal(400);
-                        expect(res.body).to.not.equal(null);
-                        expect(res.body.error).to.not.equal(null);
+                        expect(res.body).to.be.ok();
+                        expect(res.body.error).to.be.ok();
                         expect(res.body.error.message).to.equal('Expected an "order" object');
                         done();
                     });
@@ -60,7 +60,7 @@ describe('coffee store', function() {
                 api.options('/orders/1').send().end(function(err, res) {
                     expect(err).to.equal(null);
                     expect(res.status).to.equal(200);
-                    expect(res.headers['allow']).to.not.equal(null);
+                    expect(res.headers).to.have.key('allow');
                     expect(res.headers['allow']).to.equal('GET, PUT');
                     done();
                 });
@@ -82,7 +82,7 @@ describe('coffee store', function() {
                 api.options('/payments/orders/1').send().end(function(err, res) {
                     expect(err).to.equal(null);
                     expect(res.status).to.equal(200);
-                    expect(res.headers['allow']).to.not.equal(null);
+                    expect(res.headers).to.have.key('allow');
                     expect(res.headers['allow']).to.equal('GET, PUT');
                     done();
                 });
