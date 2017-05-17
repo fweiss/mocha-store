@@ -12,8 +12,15 @@ describe('coffee store', function() {
             callback(res);
         });
     }
+    function apiOptions(resource, callback) {
+        api.options(resource).send().end(function(err, res) {
+            expect(err).to.equal(null);
+            expect(res.status).to.equal(200);
+            callback(res);
+        });
+    }
 
-    describe('orders', function() {
+    describe('order', function() {
         describe('create', function() {
             it('can order americano', function(done) {
                 var order = { order: { drink: 'americano' } };
@@ -57,9 +64,7 @@ describe('coffee store', function() {
                 });
             });
             it('can query existence', function(done) {
-                api.options('/orders/1').send().end(function(err, res) {
-                    expect(err).to.equal(null);
-                    expect(res.status).to.equal(200);
+                apiOptions('/orders/1', function(res) {
                     expect(res.headers).to.have.key('allow');
                     expect(res.headers['allow']).to.equal('GET, PUT');
                     done();
