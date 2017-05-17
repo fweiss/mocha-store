@@ -5,7 +5,7 @@ describe('coffee store', function() {
     //var api = request('http://localhost:8001');
     var api = request(require('../server/store-app')());
 
-    function postWrapper(resource, entity, expectedStatus, callback) {
+    function apiPost(resource, entity, expectedStatus, callback) {
         api.post(resource).send(entity).end(function(err, res) {
             expect(err).to.equal(null);
             expect(res.status).to.equal(expectedStatus);
@@ -24,7 +24,7 @@ describe('coffee store', function() {
         describe('create', function() {
             it('can order americano', function(done) {
                 var order = { order: { drink: 'americano' } };
-                postWrapper('/orders', order, 201, function(res) {
+                apiPost('/orders', order, 201, function(res) {
                     expect(res.body.order.id).to.equal(1);
                     expect(res.body.order.drink).to.equal('americano');
                     expect(res.body.order.cost).to.equal(3);
@@ -34,14 +34,14 @@ describe('coffee store', function() {
             });
             it('can order latte', function(done) {
                 var order = { order: { drink: 'latte' } };
-                postWrapper('/orders', order, 201, function(res) {
+                apiPost('/orders', order, 201, function(res) {
                     expect(res.body.order.drink).to.equal('latte');
                     done();
                 });
             });
             it('has hypermedia link', function(done) {
                 var order = { order: { drink: 'latte' } };
-                postWrapper('/orders', order, 201, function(res) {
+                apiPost('/orders', order, 201, function(res) {
                     expect(res.body.order.next).to.be.ok();
                     expect(res.body.order.next.rel).to.equal('payment');
                     expect(res.body.order.next.href).to.equal('http://localhost:8001/payment/order/1');
@@ -84,9 +84,7 @@ describe('coffee store', function() {
     describe('payment', function() {
         describe('for order', function() {
             it('describes actions', function(done) {
-                api.options('/payments/orders/1').send().end(function(err, res) {
-                    expect(err).to.equal(null);
-                    expect(res.status).to.equal(200);
+                apiOptions('/payments/orders/1', function(res) {
                     expect(res.headers).to.have.key('allow');
                     expect(res.headers['allow']).to.equal('GET, PUT');
                     done();
