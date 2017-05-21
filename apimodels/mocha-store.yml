@@ -1,0 +1,83 @@
+swagger: '2.0'
+info:
+  title: RESTful Cafe
+  version: 1.0.0
+paths:
+  /orders:
+    post:
+      summary: Create an order for a drink
+      tags:
+        - ordering
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Order'
+      responses:
+        '201':
+          description: Order created
+          schema:
+            $ref: '#/definitions/Order'
+          examples:
+            application/json:
+              order:
+                id: 123
+                drink: espresso
+        '405':
+          description: Invalid input
+    get:
+      summary: Get a list of all the orders
+      tags:
+        - ordering
+      responses:
+        '200':
+          description: list of orders
+          schema:
+            $ref: '#/definitions/Order'
+  '/orders/{id}':
+    get:
+      summary: Get details of a particular order
+      tags:
+        - ordering
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Order'
+    put:
+      summary: Change an order
+      tags:
+        - ordering
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: order
+          in: body
+          schema:
+            $ref: '#/definitions/Order'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Order'
+        '400':
+          description: 'This order can no longer be changed'
+definitions:
+  Order:
+    type: object
+    properties:
+      order:
+        type: object
+        properties:
+          id:
+            type: integer
+            default: 0
+          drink:
+            type: string
