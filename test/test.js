@@ -2,8 +2,8 @@ var expect = require('expect.js');
 var request = require('supertest');
 
 describe('coffee store', function() {
-    //var api = request('http://localhost:8001');
-    var api = request(require('../server/store-app')());
+    var app = require('../server/store-app')();
+    var api = request(app);
 
     function apiPost(resource, entity, expectedStatus, callback) {
         api.post(resource).send(entity).end(function(err, res) {
@@ -101,6 +101,30 @@ describe('coffee store', function() {
                      expect(res.body.payment.amount).to.equal(4.40);
                     done();
                 });
+            });
+        });
+    });
+    describe('barista', function() {
+        beforeEach(function() {
+            app.fixture.orders = [ {} ];
+        });
+        // also empty orders
+        it('orders list', function(done) {
+            api.get('/orders').send().end(function(err, res) {
+                expect(res.body.orders).to.be.ok();
+                expect(res.body.orders).to.not.be.empty();
+                done();
+            });
+        });
+        it('start to prepare', function(done) {
+            var orderPrepare = { order: { status: 'preparing' }};
+            apiPut('/orders/1', orderPrepare, 200, function(res) {
+                expect(res.body).to.have.key('order');
+                var order = res.body.order;
+                expect(order.id).to.be(1);
+                expect(order).to.have.key('status');
+                expect(order.status).to.be('preparing');
+                done();
             });
         });
     });

@@ -5,12 +5,16 @@ module.exports = function() {
 
     var host = 'http://localhost:8001';
 
+    app.fixture = {};
+    app.fixture.orders = [];
+
     app.use(require('body-parser').json());
 
     var orderTemplate = {
-        id : 1,
+        id: 1,
         drink: 'latte',
         cost: 3,
+        status: '',
         next: {
             rel: 'payment',
             href: host + '/payment/order/1',
@@ -36,7 +40,7 @@ module.exports = function() {
             res.send({ error: { message: 'Expected an "order" object'}});
             return;
         }
-        var order = _.extend({}, orderTemplate, { additions: req.body.order.additions });
+        var order = _.extend({}, orderTemplate, { additions: req.body.order.additions, status: req.body.order.status });
         res.status(200);
         res.send({ order: order });
     });
@@ -48,6 +52,9 @@ module.exports = function() {
     app.put('/payments/orders/1', function(req, res) {
         res.status(201);
         res.send({ payment: {amount: 4.40 } });
+    });
+    app.get('/orders', function(req, res) {
+        res.send({ orders: app.fixture.orders });
     });
 
     return app;

@@ -59,3 +59,22 @@ Hmm, there are two shouldjs libraries?
 #### https://github.com/Automattic/expect.js
 
 This one is recommended by mocha, uses expect style, dot chaining, but not getter assertions.
+
+## Swagger first
+
+Getting lost in the jungle of packages. Tried swagger-editor, but couldn't get it to run locally.
+
+Trying plain swagger package, based an api127, with fake server.
+
+### Swagger-node
+
+https://github.com/swagger-api/swagger-node
+
+npm install swagger -g
+swagger project create ...
+cd ...
+swagger project edit
+
+but uses older 2.10.5, 
+
+
