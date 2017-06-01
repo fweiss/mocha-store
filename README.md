@@ -62,19 +62,66 @@ This one is recommended by mocha, uses expect style, dot chaining, but not gette
 
 ## Swagger first
 
+Goal is to have self-contained way to edit the swagger. Explore using stub builder. Ideally do a SLT based on the swagger.
+
+### editor.swagger.io
+
+Greate editor. Can download either JSON or YML.
+
+Problem is it saves to Downloads/swagger. Want it to download to the project source code.
+
+src? https://github.com/swagger-api/swagger-editor/blob/master/src/standalone/topbar/topbar.jsx
+
+Could use editor.swagger.io, but the save workflow is clumsy. Seems that if it can be launched locally,
+it ought to be able to store directly in the project. The editor would run out of node_modules. Can use
+nodejs server to handle the FS interface.
+
+editor.swagger.io
+based on webpack?
+
+OK, npm install swagger-editor --save
+cd node_modules/swagger-editor
+but it's a directory
+
 Getting lost in the jungle of packages. Tried swagger-editor, but couldn't get it to run locally.
 
 Trying plain swagger package, based an api127, with fake server.
 
-### Swagger-node
+#### backends
+
+https://github.com/swagger-api/swagger-editor.git
+
+#### swagger-editor-server
+
+https://www.npmjs.com/package/swagger-editor-server
+
+https://github.com/borisirota/swagger-editor-server
+
+Sounds good, but there's no way to run it. Maybe needs to be embedded?
+
+OK, created server.js
+
+Opens web browser, but then "cannot GET /"
+
+Maybe the missing piece is in your server.js, you need to statically serve swagger-editor
+
+#### swagger-node
+
+http://www.mohammedovich.com/2015/10/18/how-to-setup-swagger-ui-nodejs/
 
 https://github.com/swagger-api/swagger-node
+
+Very CLI-ish, based on yeoman.
 
 npm install swagger -g
 swagger project create ...
 cd ...
 swagger project edit
 
-but uses older 2.10.5, 
+but uses older 2.10.5,
 
+#### sweb
 
+https://github.com/zgiber/sweb
+
+Runs on Go
