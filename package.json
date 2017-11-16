@@ -1,0 +1,25 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm update",
+    "start": "node server.js",
+    "pretest": "npm update",
+    "test": "node node_modules/mocha/bin/mocha --ui bdd --reporter spec test"
+  },
+  "author": "feweiss@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^4.0.1",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "body-parser": "^1.15.2",
+    "forever": "^0.15.2",
+    "underscore": "^1.8.3"
+  }
+}
