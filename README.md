@@ -125,3 +125,7 @@ but uses older 2.10.5,
 https://github.com/zgiber/sweb
 
 Runs on Go
+
+## Links and references
+
+http://apieconomist.com/blog/darrel-miller-hypermedia-apis
