@@ -41,31 +41,19 @@ describe('order', function() {
                     })
                 })
                 it('is successful', function() {
-                //     request.end(function(err, res) {
-                        expect(res.status).to.equal(201)
-                //         done()
-                //     });
+                    expect(res.status).to.equal(201)
                 })
                 describe('response', function() {
                     it('has drink', function() {
-                        // request.end(function(err, res) {
-                            expect(res.body.order.drink).to.equal('latte')
-                        //     done()
-                        // });
+                        expect(res.body.order.drink).to.equal('latte')
                     })
                     it('has cost', function() {
-                        // request.end(function(err, res) {
-                            expect(res.body.order.cost).to.equal('3.00')
-                        //     done()
-                        // });
+                        expect(res.body.order.cost).to.equal('3.00')
                     })
                 })
                 describe('hypermedia link', function() {
                     it('for payment', function() {
-                //         request.end(function(err, res) {
-                            expect(res.body.order.links.payment).to.eql({ uri: '/payment/order/1234' })
-                //             done()
-                //         });
+                        expect(res.body.order.links.payment).to.eql({ uri: '/payment/order/1234' })
                     })
                 })
             })

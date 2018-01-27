@@ -1,8 +1,63 @@
 # Mocha Store
 
-Use the following example coffee store to explore hypermedia as the engine of state.
+Use the following example coffee store to explore hypermedia as the engine of state using TDD.
 
 https://www.infoq.com/articles/webber-rest-workflow
+
+## TDD for REST API
+Can TDD be used to develop a REST API? 
+
+### Test tooling
+For the testing framework, the following are used:
+- Mocha: a NodeJS/Jasmine test runner
+- ExpectJS: expectation/assertions library
+- Supertest: a mock HTTP client for server-less testing of express apps
+
+IntelliJ is used as the IDE of choice. This also integrates the Mocha runner and provides a test reporter.
+
+### Test plan
+The tests were divided into the following intentions:
+- API request interaction for each resource, collection, verb, request data validation, and response data
+- data persistence integration
+- acceptance test for workflows
+
+### Test spec structure
+After a first false start, the following spec structure was used. The key is to use a fluent, hierarchical structure
+that fits well with REST and hypermedia links.
+
+The top divisions are by resource. For the mocha store, the resources are:
+- order
+- drink
+- payment
+- etc.
+
+The specs for each resource are divided into two parts, following the REST pattern for a resource:
+- entity
+- collection
+
+For an entity, the specs are divided by HTTP verbs as follows:
+- POST
+- GET
+- OPTIONS
+- PUT
+- DELETE
+
+Depending on the entity and the verb, there are further subdivisions to address particular aspects of a particular API request:
+- request validation errors
+- one or more uses cases
+- response data
+- hypermedia links
+
+For a collection, the specs are divided into:
+- list
+- search (optional)
+- pagination (optional)
+
+Authorization is another aspect, but it has not been addressed in this example.
+
+Here is an example of how this fluent spec structure is displayed in an IDE:
+
+![Screenshot](/docs/fluent-spec.png?raw=true "Fluent spec resport in IntelliJ")
 
 ## Notes
 
