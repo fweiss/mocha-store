@@ -58,5 +58,17 @@ describe('order', function() {
                 })
             })
          })
+        describe('options', function() {
+            describe('error when', function() {
+                it('order not found', function(done) {
+                    api.options('/orders/7').end(function(err, res) {
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(404)
+                        expect(res.body.error).to.contain('no such order')
+                        done()
+                    });
+                })
+            })
+        })
     })
 })

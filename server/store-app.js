@@ -25,5 +25,9 @@ module.exports = function() {
         }
     })
 
+    app.options('/orders/:orderId', function(req, res) {
+        sendErrorStatusMessage(res, 404, 'no such order')
+    })
+
     return app;
 };
