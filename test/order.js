@@ -33,36 +33,39 @@ describe('order', function() {
                 })
             })
             describe('a latte', function() {
-                var request
-                beforeEach(function() {
-                    request = api.post('/orders').send({ order: { drink: 'latte' } })
-                })
-                it('is successful', function(done) {
-                    request.end(function(err, res) {
-                        expect(res.status).to.equal(201)
+                var res
+                beforeEach(function(done) {
+                    api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, response) {
+                        res = response
                         done()
-                    });
+                    })
+                })
+                it('is successful', function() {
+                //     request.end(function(err, res) {
+                        expect(res.status).to.equal(201)
+                //         done()
+                //     });
                 })
                 describe('response', function() {
-                    it('has drink', function(done) {
-                        request.end(function(err, res) {
+                    it('has drink', function() {
+                        // request.end(function(err, res) {
                             expect(res.body.order.drink).to.equal('latte')
-                            done()
-                        });
+                        //     done()
+                        // });
                     })
-                    it('has cost', function(done) {
-                        request.end(function(err, res) {
+                    it('has cost', function() {
+                        // request.end(function(err, res) {
                             expect(res.body.order.cost).to.equal('3.00')
-                            done()
-                        });
+                        //     done()
+                        // });
                     })
                 })
                 describe('hypermedia link', function() {
-                    it('for payment', function(done) {
-                        request.end(function(err, res) {
+                    it('for payment', function() {
+                //         request.end(function(err, res) {
                             expect(res.body.order.links.payment).to.eql({ uri: '/payment/order/1234' })
-                            done()
-                        });
+                //             done()
+                //         });
                     })
                 })
             })
