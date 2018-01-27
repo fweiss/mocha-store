@@ -69,6 +69,30 @@ describe('order', function() {
                     });
                 })
             })
+            describe('modifiable', function() {
+                it('allows put', function(done) {
+                    api.options('/orders/6').end(function(err, res) {
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(200)
+                        expect(res.headers).to.have.key('allow');
+                        expect(res.headers['allow']).to.equal('GET, PUT');
+                        done()
+                    });
+
+                })
+            })
+            describe('not modifiable', function() {
+                it('disallows put', function(done) {
+                    api.options('/orders/5').end(function(err, res) {
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(200)
+                        expect(res.headers).to.have.key('allow');
+                        expect(res.headers['allow']).to.equal('GET');
+                        done()
+                    });
+
+                })
+            })
         })
     })
 })

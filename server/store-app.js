@@ -26,7 +26,14 @@ module.exports = function() {
     })
 
     app.options('/orders/:orderId', function(req, res) {
-        sendErrorStatusMessage(res, 404, 'no such order')
+        if (req.params.orderId == 7) {
+            sendErrorStatusMessage(res, 404, 'no such order')
+        } else {
+            const orderOptions = req.params.orderId == 6 ? 'GET, PUT' : 'GET'
+            res.status(200)
+            res.set('Allow', orderOptions)
+            res.send()
+        }
     })
 
     return app;
