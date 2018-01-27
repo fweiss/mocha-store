@@ -33,15 +33,18 @@ describe('order', function() {
                 })
             })
             describe('a latte', function() {
+                let request;
+                beforeEach(function() {
+                    request = api.post('/orders').send({ order: { drink: 'latte' } })
+                })
                 it('is successful', function(done) {
-                    api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, res) {
-                        expect(err).to.equal(null);
+                    request.end(function(err, res) {
                         expect(res.status).to.equal(201)
                         done()
                     });
                 })
                 it('response has drink', function(done) {
-                    api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, res) {
+                    request.end(function(err, res) {
                         expect(res.body.order.drink).to.equal('latte')
                         done()
                     });
