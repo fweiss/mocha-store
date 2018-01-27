@@ -23,9 +23,17 @@ describe('order', function() {
                         done()
                     });
                 })
+                it('order has no drink', function(done) {
+                    api.post('/orders').send({ order: {} }).end(function(err, res) {
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(400)
+                        expect(res.body.error).to.contain('missing drink object')
+                        done()
+                    });
+                })
             })
             it('is successful', function(done) {
-                api.post('/orders').send({ order: {} }).end(function(err, res) {
+                api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, res) {
                     expect(err).to.equal(null);
                     expect(res.status).to.equal(201)
                     done()
