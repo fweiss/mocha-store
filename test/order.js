@@ -33,7 +33,7 @@ describe('order', function() {
                 })
             })
             describe('a latte', function() {
-                var request;
+                var request
                 beforeEach(function() {
                     request = api.post('/orders').send({ order: { drink: 'latte' } })
                 })

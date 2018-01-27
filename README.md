@@ -156,6 +156,11 @@ https://github.com/zgiber/sweb
 
 Runs on Go
 
+## IntelliJ notes
+fix: don't use semicolom to terminate statement in new code
+
+warning: 'unresolved variable to' for expect.js 
+
 ## Links and references
 
 http://apieconomist.com/blog/darrel-miller-hypermedia-apis
