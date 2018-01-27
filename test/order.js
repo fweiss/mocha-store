@@ -32,13 +32,21 @@ describe('order', function() {
                     });
                 })
             })
-            it('is successful', function(done) {
-                api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, res) {
-                    expect(err).to.equal(null);
-                    expect(res.status).to.equal(201)
-                    done()
-                });
+            describe('a latte', function() {
+                it('is successful', function(done) {
+                    api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, res) {
+                        expect(err).to.equal(null);
+                        expect(res.status).to.equal(201)
+                        done()
+                    });
+                })
+                it('response has drink', function(done) {
+                    api.post('/orders').send({ order: { drink: 'latte' } }).end(function(err, res) {
+                        expect(res.body.order.drink).to.equal('latte')
+                        done()
+                    });
+                })
             })
-        })
+         })
     })
 })
