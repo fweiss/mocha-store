@@ -64,9 +64,17 @@ This one is recommended by mocha, uses expect style, dot chaining, but not gette
 
 Goal is to have self-contained way to edit the swagger. Explore using stub builder. Ideally do a SLT based on the swagger.
 
+Looked at the following:
+
+- editor.swagger.io
+- swagger-editor
+- swagger-editor-server
+- swagger-node
+- sweb
+
 ### editor.swagger.io
 
-Greate editor. Can download either JSON or YML.
+Great editor. Can download either JSON or YML.
 
 Problem is it saves to Downloads/swagger. Want it to download to the project source code.
 
@@ -86,6 +94,28 @@ but it's a directory
 Getting lost in the jungle of packages. Tried swagger-editor, but couldn't get it to run locally.
 
 Trying plain swagger package, based an api127, with fake server.
+
+### swagger-editor
+
+npm install swagger-editor --save
+
+Oh man, huge, like 100 npm packages. Also the main package is just css and js. Where's the app?
+
+The README say to run 'npm start' but that does not work in the directory where npm install was run.
+Going to the node_module directory and running 'npm start' download yet more npm packages. It starts a webserver
+at :3001, but the page is only a directory listing.
+
+Hmm, the 'swagger-editor' npm package appears to be a bundled up development environment. I'm looking for just a runtime.
+
+OK, let's try cloning and running from there. Still no joy, run 'npm start' gives directory listing.
+Well, there is an index.html in the root directory and it works! That was not in the npm.
+
+All right then, just cloning git gives an index.html ready to run, no need to build it.
+The swagger-editor npm was a false start.
+I'm still looking for a ready to run npm package. Maybe I'll have to build it myself.
+
+Maybe the swagger-editor-dist package is the key. It only contains the js and css assets. Add a simple index.html
+and you good to go?
 
 #### backends
 
