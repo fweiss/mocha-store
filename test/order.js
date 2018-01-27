@@ -23,7 +23,7 @@ describe('order', function() {
                         done()
                     });
                 })
-                it('order has no drink', function(done) {
+                it('no drink object', function(done) {
                     api.post('/orders').send({ order: {} }).end(function(err, res) {
                         expect(err).to.equal(null);
                         expect(res.status).to.equal(400)
@@ -33,7 +33,7 @@ describe('order', function() {
                 })
             })
             describe('a latte', function() {
-                let request;
+                var request;
                 beforeEach(function() {
                     request = api.post('/orders').send({ order: { drink: 'latte' } })
                 })
@@ -43,17 +43,27 @@ describe('order', function() {
                         done()
                     });
                 })
-                it('response has drink', function(done) {
-                    request.end(function(err, res) {
-                        expect(res.body.order.drink).to.equal('latte')
-                        done()
-                    });
+                describe('response', function() {
+                    it('has drink', function(done) {
+                        request.end(function(err, res) {
+                            expect(res.body.order.drink).to.equal('latte')
+                            done()
+                        });
+                    })
+                    it('has cost', function(done) {
+                        request.end(function(err, res) {
+                            expect(res.body.order.cost).to.equal('3.00')
+                            done()
+                        });
+                    })
                 })
-                it('response has cost', function(done) {
-                    request.end(function(err, res) {
-                        expect(res.body.order.cost).to.equal('3.00')
-                        done()
-                    });
+                describe('hypermedia link', function() {
+                    it('for payment', function(done) {
+                        request.end(function(err, res) {
+                            expect(res.body.order.links.payment).to.eql({ uri: '/payment/order/1234' })
+                            done()
+                        });
+                    })
                 })
             })
          })
