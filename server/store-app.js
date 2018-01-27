@@ -14,11 +14,9 @@ module.exports = function() {
 
     app.post('/orders', function(req, res) {
         if (req.headers['content-length'] == 0) {
-            res.status(400)
-            res.send({error: 'no data'})
+            sendErrorStatusMessage(res, 400, 'no data')
         } else if (_.isUndefined(req.body.order)) {
-            res.status(400)
-            res.send({error: 'missing order object'})
+            sendErrorStatusMessage(res, 400, 'missing order object')
         } else if (_.isUndefined(req.body.order.drink)) {
             sendErrorStatusMessage(res, 400, 'missing drink object')
         } else {
