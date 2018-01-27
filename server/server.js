@@ -1,1 +1,1 @@
-require('./store-app.js')().listen(8001);
+require('./store-app.js')().listen(8001)
