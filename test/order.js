@@ -49,6 +49,12 @@ describe('order', function() {
                         done()
                     });
                 })
+                it('response has cost', function(done) {
+                    request.end(function(err, res) {
+                        expect(res.body.order.cost).to.equal('3.00')
+                        done()
+                    });
+                })
             })
          })
     })

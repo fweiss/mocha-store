@@ -21,7 +21,7 @@ module.exports = function() {
             sendErrorStatusMessage(res, 400, 'missing drink object')
         } else {
             res.status(201)
-            res.send({order: { drink: 'latte' } })
+            res.send({order: { drink: 'latte', cost: '3.00' } })
         }
     })
 
