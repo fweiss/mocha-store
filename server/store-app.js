@@ -35,6 +35,10 @@ module.exports = function() {
             res.send()
         }
     })
+    app.put('/orders/:orderId', function(req, res) {
+        res.status(200)
+        res.send({ order: { additions: 'tor' } })
+    })
 
     return app;
 };

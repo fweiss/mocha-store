@@ -84,13 +84,26 @@ describe('order', function() {
             describe('not modifiable', function() {
                 it('disallows put', function(done) {
                     api.options('/orders/5').end(function(err, res) {
-                        expect(err).to.equal(null);
                         expect(res.status).to.equal(200)
                         expect(res.headers).to.have.key('allow');
                         expect(res.headers['allow']).to.equal('GET');
                         done()
                     });
-
+                })
+            })
+        })
+        describe('put', function() {
+            describe('expect continue', function() {
+                describe('modifiable', function() {
+                    it('succeeds', function(done) {
+                        var partialOrder = { order: { additions: 'tor' }};
+                        api.put('/orders/1').set('Expect', '100-Continue').send(partialOrder).end(function(err, res) {
+                            expect(err).to.equal(null);
+                            expect(res.status).to.equal(200);
+                            expect(res.body.order.additions).to.equal('tor');
+                            done();
+                        });
+                    })
                 })
             })
         })
