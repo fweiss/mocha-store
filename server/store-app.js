@@ -5,6 +5,10 @@ module.exports = function() {
 
     var host = 'http://localhost:8001';
 
+    var defaultOrder = {
+        drink: 'latte'
+    }
+
     app.use(require('body-parser').json())
 
     function sendErrorStatusMessage(res, status, message) {
@@ -14,7 +18,7 @@ module.exports = function() {
 
     app.post('/orders', function(req, res) {
         if (req.headers['content-length'] == 0) {
-            sendErrorStatusMessage(res, 400, 'no data')
+            sendErrorStatusMessage(res, 400, 'empty request body')
         } else if (_.isUndefined(req.body.order)) {
             sendErrorStatusMessage(res, 400, 'missing order object')
         } else if (_.isUndefined(req.body.order.drink)) {
@@ -36,8 +40,12 @@ module.exports = function() {
         }
     })
     app.put('/orders/:orderId', function(req, res) {
+        if (req.headers['content-length'] == 0) {
+            return sendErrorStatusMessage(res, 400, 'empty request body')
+        }
+        var updatedOrder = _.extend({}, defaultOrder, req.body.order)
         res.status(200)
-        res.send({ order: { additions: 'tor' } })
+        res.send({ order:  updatedOrder })
     })
 
     return app;

@@ -11,7 +11,7 @@ describe('order', function() {
                     api.post('/orders').end(function(err, res) {
                         expect(err).to.equal(null);
                         expect(res.status).to.equal(400)
-                        expect(res.body.error).to.contain('no data')
+                        expect(res.body.error).to.contain('empty request body')
                         done()
                     });
                 })
@@ -93,6 +93,16 @@ describe('order', function() {
             })
         })
         describe('put', function() {
+            // although the guide indicated optionally doing a "trial" put with Expect: 100-Continue, we'll defer that
+            describe('error when', function() {
+                it('no body', function(done) {
+                    api.put('/orders/1').end(function(err, res) {
+                        expect(res.status).to.equal(400);
+                        expect(res.body.error).to.contain('empty request body');
+                        done();
+                    });
+                })
+            })
             describe('expect continue', function() {
                 describe('modifiable', function() {
                     it('succeeds', function(done) {
