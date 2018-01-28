@@ -18,15 +18,16 @@ module.exports = function() {
 
     app.post('/orders', function(req, res) {
         if (req.headers['content-length'] == 0) {
-            sendErrorStatusMessage(res, 400, 'empty request body')
-        } else if (_.isUndefined(req.body.order)) {
-            sendErrorStatusMessage(res, 400, 'missing order object')
-        } else if (_.isUndefined(req.body.order.drink)) {
-            sendErrorStatusMessage(res, 400, 'missing drink object')
-        } else {
-            res.status(201)
-            res.send({order: { drink: 'latte', cost: '3.00', links: { payment: { uri: '/payment/order/1234' } } } })
+            return sendErrorStatusMessage(res, 400, 'empty request body')
         }
+        if (_.isUndefined(req.body.order)) {
+            return sendErrorStatusMessage(res, 400, 'missing order object')
+        }
+        if (_.isUndefined(req.body.order.drink)) {
+            return sendErrorStatusMessage(res, 400, 'missing drink object')
+        }
+        res.status(201)
+        res.send({order: { drink: 'latte', cost: '3.00', links: { payment: { uri: '/payment/order/1234' } } } })
     })
 
     app.options('/orders/:orderId', function(req, res) {
