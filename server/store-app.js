@@ -43,6 +43,9 @@ module.exports = function() {
         if (req.headers['content-length'] == 0) {
             return sendErrorStatusMessage(res, 400, 'empty request body')
         }
+        if (_.isUndefined(req.body.order)) {
+            return sendErrorStatusMessage(res, 400, 'missing order object')
+        }
         var updatedOrder = _.extend({}, defaultOrder, req.body.order)
         res.status(200)
         res.send({ order:  updatedOrder })

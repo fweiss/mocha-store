@@ -102,6 +102,13 @@ describe('order', function() {
                         done();
                     });
                 })
+                it('no order object', function(done) {
+                    api.put('/orders/1').send({}).end(function(err, res) {
+                        expect(res.status).to.equal(400);
+                        expect(res.body.error).to.contain('missing order object');
+                        done();
+                    });
+                })
             })
             describe('expect continue', function() {
                 describe('modifiable', function() {
