@@ -109,6 +109,13 @@ describe('order', function() {
                         done();
                     });
                 })
+                it('invalid update data', function(done) {
+                    api.put('/orders/1').send({ order: { foobar: 'toast' } }).end(function(err, res) {
+                        expect(res.status).to.equal(400);
+                        expect(res.body.error).to.contain('invalid update');
+                        done();
+                    });
+                })
             })
             describe('expect continue', function() {
                 describe('modifiable', function() {

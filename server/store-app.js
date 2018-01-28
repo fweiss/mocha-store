@@ -46,6 +46,9 @@ module.exports = function() {
         if (_.isUndefined(req.body.order)) {
             return sendErrorStatusMessage(res, 400, 'missing order object')
         }
+        if (_.isUndefined(req.body.order.additions)) {
+            return sendErrorStatusMessage(res, 400, 'invalid update')
+        }
         var updatedOrder = _.extend({}, defaultOrder, req.body.order)
         res.status(200)
         res.send({ order:  updatedOrder })
