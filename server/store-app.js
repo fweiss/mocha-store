@@ -50,6 +50,9 @@ module.exports = function() {
         if (_.isUndefined(req.body.order.additions)) {
             return sendErrorStatusMessage(res, 400, 'invalid update')
         }
+        if (req.params.orderId == 2) {
+            return sendErrorStatusMessage(res, 417, 'order already completed')
+        }
         var updatedOrder = _.extend({}, defaultOrder, req.body.order)
         res.status(200)
         res.send({ order:  updatedOrder })
