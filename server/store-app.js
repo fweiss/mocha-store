@@ -58,5 +58,15 @@ module.exports = function() {
         res.send({ order:  updatedOrder })
     })
 
+    app.options('/payments/orders/:orderId', function(req, res) {
+        if (req.params.orderId === '7') {
+            return sendErrorStatusMessage(res, 404, 'no such order')
+        }
+        const paymentOptions = req.params.orderId === '6' ? 'GET, PUT' : 'GET'
+        res.status(200)
+        res.set('Allow', paymentOptions)
+        res.send()
+    })
+
     return app;
 };
