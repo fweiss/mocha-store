@@ -53,7 +53,7 @@ module.exports = function() {
         if (req.params.orderId === '2') {
             return sendErrorStatusMessage(res, 417, 'order already completed')
         }
-        var updatedOrder = _.extend({}, defaultOrder, req.body.order)
+        var updatedOrder = _.extend({ price: '4.00' }, defaultOrder, req.body.order)
         res.status(200)
         res.send({ order:  updatedOrder })
     })
