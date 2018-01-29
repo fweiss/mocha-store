@@ -147,10 +147,6 @@ describe('order', function() {
                     })
                 })
             })
-            describe('not modifiable', function() {
-            })
-            describe('modifiable', function() {
-            })
         })
     })
 })
