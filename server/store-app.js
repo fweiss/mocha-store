@@ -17,7 +17,7 @@ module.exports = function() {
     }
 
     app.post('/orders', function(req, res) {
-        if (req.headers['content-length'] == 0) {
+        if (req.headers['content-length'] === '0') {
             return sendErrorStatusMessage(res, 400, 'empty request body')
         }
         if (_.isUndefined(req.body.order)) {
@@ -31,17 +31,17 @@ module.exports = function() {
     })
 
     app.options('/orders/:orderId', function(req, res) {
-        if (req.params.orderId == 7) {
+        if (req.params.orderId === '7') {
             sendErrorStatusMessage(res, 404, 'no such order')
         } else {
-            const orderOptions = req.params.orderId == 6 ? 'GET, PUT' : 'GET'
+            const orderOptions = req.params.orderId === '6' ? 'GET, PUT' : 'GET'
             res.status(200)
             res.set('Allow', orderOptions)
             res.send()
         }
     })
     app.put('/orders/:orderId', function(req, res) {
-        if (req.headers['content-length'] == 0) {
+        if (req.headers['content-length'] === '0') {
             return sendErrorStatusMessage(res, 400, 'empty request body')
         }
         if (_.isUndefined(req.body.order)) {
@@ -50,7 +50,7 @@ module.exports = function() {
         if (_.isUndefined(req.body.order.additions)) {
             return sendErrorStatusMessage(res, 400, 'invalid update')
         }
-        if (req.params.orderId == 2) {
+        if (req.params.orderId === '2') {
             return sendErrorStatusMessage(res, 417, 'order already completed')
         }
         var updatedOrder = _.extend({}, defaultOrder, req.body.order)
