@@ -146,12 +146,7 @@ describe('order', function() {
                         })
                     })
                     it('has addition', function() {
-                        // var partialOrder = {order: {additions: 'tor'}};
-                        // api.put('/orders/1').send(partialOrder).end(function (err, res) {
-                            expect(res.body.order.additions).to.equal('tor');
-                        //     done();
-                        //
-                        // })
+                        expect(res.body.order.additions).to.equal('tor');
                     })
                     it('has updated price', function() {
                         expect(res.body.order.price).to.be('4.00')
