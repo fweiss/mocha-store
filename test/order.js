@@ -117,6 +117,17 @@ describe('order', function() {
                     });
                 })
             })
+            describe('additions shot', function() {
+                describe('error when', function() {
+
+                })
+                it('success',function() {
+
+                } )
+                describe('response', function() {
+
+                })
+            })
             describe('not modifiable', function() {
                 it('succeeds', function(done) {
                     var partialOrder = { order: { additions: 'tor' }};

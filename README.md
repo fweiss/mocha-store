@@ -59,6 +59,19 @@ Here is an example of how this fluent spec structure is displayed in an IDE:
 
 ![Screenshot](/docs/fluent-spec.png?raw=true "Fluent spec resport in IntelliJ")
 
+Example entity template:
+
+* orders (an entity of a resoource)
+  * put (one of the REST verbs)
+    * error when (general request validations)
+      * ... (request validation assertions)
+    * succeeds (a quick smoke test)
+    * addition shot (detailed use case)
+      * error when (use case request validation)
+        * ... (request validation assertions)
+      * response (use case response assertions)
+        * ... (response assertions)
+
 ## Notes
 
 ### Hypermedia link (next)
