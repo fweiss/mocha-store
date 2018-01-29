@@ -122,7 +122,7 @@ describe('order', function() {
                     it('order already completed', function(done) {
                         var partialOrder = { order: { additions: 'tor' }};
                         api.put('/orders/2').send(partialOrder).end(function(err, res) {
-                            expect(res.status).to.equal(417);
+                            expect(res.status).to.equal(409);
                             expect(res.body.error).to.contain('order already completed');
                             done();
                         });
