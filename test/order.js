@@ -128,7 +128,7 @@ describe('order', function() {
                         });
                     })
                 })
-                it('success',function() {
+                it('success',function(done) {
                     var partialOrder = { order: { additions: 'tor' }};
                     api.put('/orders/1').send(partialOrder).end(function(err, res) {
                         expect(res.status).to.equal(200);
@@ -137,7 +137,15 @@ describe('order', function() {
                     });
                 } )
                 describe('response', function() {
-                    it('has addtion', function(done) {
+                    var res
+                    beforeEach(function(done) {
+                        const partialOrder = { order: { additions: 'tor' }};
+                        api.put('/orders/1').send(partialOrder).end(function (err, response) {
+                            res = response
+                            done()
+                        })
+                    })
+                    it('has addition', function(done) {
                         var partialOrder = {order: {additions: 'tor'}};
                         api.put('/orders/1').send(partialOrder).end(function (err, res) {
                             expect(res.body.order.additions).to.equal('tor');
