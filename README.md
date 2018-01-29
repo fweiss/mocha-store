@@ -72,6 +72,9 @@ Example entity template:
       * response (use case response assertions)
         * ... (response assertions)
 
+Tip: continuously review the spec report to check if the tests are structured fluently. Such commits are like to be described
+as "Refactor test: improve fluent structure".
+
 ## Notes
 
 ### Hypermedia link (next)

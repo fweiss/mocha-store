@@ -119,34 +119,37 @@ describe('order', function() {
             })
             describe('additions shot', function() {
                 describe('error when', function() {
-
+                    it('order already completed', function(done) {
+                        var partialOrder = { order: { additions: 'tor' }};
+                        api.put('/orders/2').send(partialOrder).end(function(err, res) {
+                            expect(res.status).to.equal(417);
+                            expect(res.body.error).to.contain('order already completed');
+                            done();
+                        });
+                    })
                 })
                 it('success',function() {
-
-                } )
-                describe('response', function() {
-
-                })
-            })
-            describe('not modifiable', function() {
-                it('succeeds', function(done) {
-                    var partialOrder = { order: { additions: 'tor' }};
-                    api.put('/orders/2').send(partialOrder).end(function(err, res) {
-                        expect(res.status).to.equal(417);
-                        expect(res.body.error).to.contain('order already completed');
-                        done();
-                    });
-                })
-            })
-            describe('modifiable', function() {
-                it('fails', function(done) {
                     var partialOrder = { order: { additions: 'tor' }};
                     api.put('/orders/1').send(partialOrder).end(function(err, res) {
                         expect(res.status).to.equal(200);
                         expect(res.body.order.additions).to.equal('tor');
                         done();
                     });
+                } )
+                describe('response', function() {
+                    it('has addtion', function(done) {
+                        var partialOrder = {order: {additions: 'tor'}};
+                        api.put('/orders/1').send(partialOrder).end(function (err, res) {
+                            expect(res.body.order.additions).to.equal('tor');
+                            done();
+
+                        })
+                    })
                 })
+            })
+            describe('not modifiable', function() {
+            })
+            describe('modifiable', function() {
             })
         })
     })
