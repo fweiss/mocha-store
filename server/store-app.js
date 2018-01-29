@@ -32,13 +32,12 @@ module.exports = function() {
 
     app.options('/orders/:orderId', function(req, res) {
         if (req.params.orderId === '7') {
-            sendErrorStatusMessage(res, 404, 'no such order')
-        } else {
-            const orderOptions = req.params.orderId === '6' ? 'GET, PUT' : 'GET'
-            res.status(200)
-            res.set('Allow', orderOptions)
-            res.send()
+            return sendErrorStatusMessage(res, 404, 'no such order')
         }
+        const orderOptions = req.params.orderId === '6' ? 'GET, PUT' : 'GET'
+        res.status(200)
+        res.set('Allow', orderOptions)
+        res.send()
     })
     app.put('/orders/:orderId', function(req, res) {
         if (req.headers['content-length'] === '0') {
