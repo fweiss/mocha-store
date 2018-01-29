@@ -145,13 +145,13 @@ describe('order', function() {
                             done()
                         })
                     })
-                    it('has addition', function(done) {
-                        var partialOrder = {order: {additions: 'tor'}};
-                        api.put('/orders/1').send(partialOrder).end(function (err, res) {
+                    it('has addition', function() {
+                        // var partialOrder = {order: {additions: 'tor'}};
+                        // api.put('/orders/1').send(partialOrder).end(function (err, res) {
                             expect(res.body.order.additions).to.equal('tor');
-                            done();
-
-                        })
+                        //     done();
+                        //
+                        // })
                     })
                 })
             })

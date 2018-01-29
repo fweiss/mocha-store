@@ -76,6 +76,10 @@ Tip: continuously review the spec report to check if the tests are structured fl
 as "Refactor test: improve fluent structure".
 
 ## Notes
+Common fluent test refactorings:
+
+* Refactor test: better fluent structure
+* Refactor test: extract fixture (there's a bit to this: in it, remove done, comment out old code except asserts)
 
 ### Hypermedia link (next)
 
