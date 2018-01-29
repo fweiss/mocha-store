@@ -156,6 +156,9 @@ describe('order', function() {
                     it('has updated price', function() {
                         expect(res.body.order.price).to.be('4.00')
                     })
+                    it('has drink', function() {
+                        expect(res.body.order.drink).to.be('latte')
+                    })
                 })
             })
         })
