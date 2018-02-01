@@ -57,6 +57,11 @@ module.exports = function() {
         res.status(200)
         res.send({ order:  updatedOrder })
     })
+    app.get('/orders', function(req, res) {
+        res.status(200)
+        res.set('content-type', 'application/atom+xml')
+        res.send()
+    })
 
     return app;
 };

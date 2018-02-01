@@ -160,4 +160,22 @@ describe('order', function() {
             })
         })
     })
+    describe('collection', function() {
+        describe('atom', function() {
+            it('succeeds', function(done) {
+                api.get('/orders').end(function(err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+            })
+            describe('response', function() {
+                it('content type', function(done) {
+                    api.get('/orders').end(function(err, res) {
+                        expect(res.header['content-type']).to.equal('application/atom+xml');
+                        done();
+                    });
+                })
+            })
+        })
+    })
 })
