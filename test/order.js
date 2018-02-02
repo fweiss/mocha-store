@@ -171,7 +171,15 @@ describe('order', function() {
             describe('response', function() {
                 it('content type', function(done) {
                     api.get('/orders').end(function(err, res) {
-                        expect(res.header['content-type']).to.equal('application/atom+xml');
+                        // ignore encoding for now
+                        expect(res.header['content-type']).to.contain('application/atom+xml');
+                        done();
+                    });
+                })
+                it('feed', function(done) {
+                    api.get('/orders').end(function(err, res) {
+                        // use text or parse xml?
+                        expect(res.text).to.contain('<feed xmlns="http://www.w3.org/2005/Atom">');
                         done();
                     });
                 })

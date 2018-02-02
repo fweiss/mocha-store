@@ -60,7 +60,7 @@ module.exports = function() {
     app.get('/orders', function(req, res) {
         res.status(200)
         res.set('content-type', 'application/atom+xml')
-        res.send()
+        res.send('<feed xmlns="http://www.w3.org/2005/Atom">')
     })
 
     return app;

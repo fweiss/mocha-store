@@ -248,3 +248,5 @@ http://apieconomist.com/blog/darrel-miller-hypermedia-apis
 http://intercoolerjs.org/2016/05/08/hatoeas-is-for-humans.html
 
 Blog on hAPI, FoxyCart: https://medium.com/@lukestokes/why-your-colleagues-still-don-t-understand-hypermedia-apis-1a5a2cf82540
+
+http://willi.am/node-mocha-supertest/
