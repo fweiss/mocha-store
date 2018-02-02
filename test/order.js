@@ -192,20 +192,27 @@ describe('order', function() {
                 });
             })
             describe('response', function() {
-                it('content type', function(done) {
-                    api.get('/orders').end(function(err, res) {
+                var res
+                beforeEach(function(done) {
+                    api.get('/orders').end(function(err, response) {
+                        res = response
+                        done()
+                    })
+                })
+                it('content type', function() {
+                    // api.get('/orders').end(function(err, res) {
                         // ignore encoding for now
                         expect(res.header['content-type']).to.contain('application/atom+xml');
-                        done();
-                    });
+                        // done();
+                    // });
                 })
-                it('feed xmlns', function(done) {
-                    api.get('/orders').end(function(err, res) {
+                it('feed xmlns', function() {
+                    // api.get('/orders').end(function(err, res) {
                         // use text or parse xml?
                         // expect(res.body).to.contain('<feed xmlns="http://www.w3.org/2005/Atom">');
                         expect(res.body.feed.$.xmlns).to.equal('http://www.w3.org/2005/Atom')
-                        done();
-                    });
+                        // done();
+                    // });
                 })
             })
         })
