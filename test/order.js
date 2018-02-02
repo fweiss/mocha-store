@@ -158,4 +158,30 @@ describe('order', function() {
             })
         })
     })
+    describe('collection', function() {
+        describe('atom', function() {
+            it('succeeds', function(done) {
+                api.get('/orders').end(function(err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+            })
+            describe('response', function() {
+                it('content type', function(done) {
+                    api.get('/orders').end(function(err, res) {
+                        // ignore encoding for now
+                        expect(res.header['content-type']).to.contain('application/atom+xml');
+                        done();
+                    });
+                })
+                it('feed', function(done) {
+                    api.get('/orders').end(function(err, res) {
+                        // use text or parse xml?
+                        expect(res.text).to.contain('<feed xmlns="http://www.w3.org/2005/Atom">');
+                        done();
+                    });
+                })
+            })
+        })
+    })
 })

@@ -15,6 +15,11 @@ For the testing framework, the following are used:
 
 IntelliJ is used as the IDE of choice. This also integrates the Mocha runner and provides a test reporter.
 
+### Running mocha test in IntelliJ
+Run > Edit Configurations, click "+", select Mocha. Usually this will set up things automatically.
+
+Run > mocha-store-test, or use the toolbar. After lauch, run from the Run console at the bottom of the window.
+
 ### Test plan
 The tests were divided into the following intentions:
 - API request interaction for each resource, collection, verb, request data validation, and response data
@@ -243,3 +248,5 @@ http://apieconomist.com/blog/darrel-miller-hypermedia-apis
 http://intercoolerjs.org/2016/05/08/hatoeas-is-for-humans.html
 
 Blog on hAPI, FoxyCart: https://medium.com/@lukestokes/why-your-colleagues-still-don-t-understand-hypermedia-apis-1a5a2cf82540
+
+http://willi.am/node-mocha-supertest/

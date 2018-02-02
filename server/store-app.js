@@ -56,6 +56,11 @@ module.exports = function() {
         res.status(200)
         res.send({ order:  updatedOrder })
     })
+    app.get('/orders', function(req, res) {
+        res.status(200)
+        res.set('content-type', 'application/atom+xml')
+        res.send('<feed xmlns="http://www.w3.org/2005/Atom">')
+    })
 
     app.options('/payments/orders/:orderId', function(req, res) {
         if (req.params.orderId === '7') {
