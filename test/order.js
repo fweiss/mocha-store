@@ -206,6 +206,10 @@ describe('order', function() {
                 it('feed xmlns', function() {
                     expect(res.body.feed.$.xmlns).to.equal('http://www.w3.org/2005/Atom')
                 })
+                it('feed updated', function() {
+                    expect(res.body.feed.updated.length).to.equal(1)
+                    expect(res.body.feed.updated[0]).to.equal('20180201')
+                })
             })
         })
     })
