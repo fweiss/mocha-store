@@ -1,5 +1,30 @@
 var expect = require('expect.js')
 var request = require('supertest')
+const xml2js = require('xml2js')
+
+require('superagent').parse['application/atom+xml'] = function(res, fn) {
+    res.text = '';
+    res.setEncoding('utf8');
+    res.on('data', function(chunk)  {
+        res.text += chunk;
+    });
+    res.on('end', function() {
+        try {
+            xml2js.parseString(res.text, function(err, json) {
+                fn(null, json)
+            })
+        } catch (e) {
+            var err = e;
+            // issue #675: return the raw response if the response parsing fails
+            err.rawResponse = res.text || null;
+            // issue #876: return the http status code if the response parsing fails
+            err.statusCode = res.statusCode;
+        }
+        finally {
+            // fn(err, body);
+        }
+    })
+}
 
 describe('order', function() {
     var app = require('../server/store-app')();
@@ -174,10 +199,11 @@ describe('order', function() {
                         done();
                     });
                 })
-                it('feed', function(done) {
+                it('feed xmlns', function(done) {
                     api.get('/orders').end(function(err, res) {
                         // use text or parse xml?
-                        expect(res.text).to.contain('<feed xmlns="http://www.w3.org/2005/Atom">');
+                        // expect(res.body).to.contain('<feed xmlns="http://www.w3.org/2005/Atom">');
+                        expect(res.body.feed.$.xmlns).to.equal('http://www.w3.org/2005/Atom')
                         done();
                     });
                 })
