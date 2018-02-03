@@ -75,6 +75,15 @@ module.exports = function() {
         res.set('Allow', paymentOptions)
         res.send()
     })
+    app.put('/payments/order/:orderid', function(req, res) {
+        if (req.headers['content-length'] === '0') {
+            return sendErrorStatusMessage(res, 400, 'no request body')
+        }
+        if (_.isUndefined(req.body.payment)) {
+            return sendErrorStatusMessage(res, 400, 'no payment object')
+        }
+        return sendErrorStatusMessage(res, 400, 'no card number')
+    })
 
     return app;
 };

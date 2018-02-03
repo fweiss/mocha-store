@@ -36,4 +36,29 @@ describe('payment', function() {
             })
         })
     })
+    describe('put', function() {
+        describe('error when', function() {
+            it('no body', function(done) {
+                api.put('/payments/order/1').end(function(err, res) {
+                    expect(res.status).to.equal(400)
+                    expect(res.body.error).to.contain('no request body')
+                    done()
+                })
+            })
+            it('no payment object', function(done) {
+                api.put('/payments/order/1').send({ no: 'payemnt' }).end(function(err, res) {
+                    expect(res.status).to.equal(400)
+                    expect(res.body.error).to.contain('no payment object')
+                    done()
+                })
+            })
+            it('no card number', function(done) {
+                api.put('/payments/order/1').send({ payment: {} }).end(function(err, res) {
+                    expect(res.status).to.equal(400)
+                    expect(res.body.error).to.contain('no card number')
+                    done()
+                })
+            })
+        })
+    })
 })
