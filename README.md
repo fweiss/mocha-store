@@ -22,9 +22,12 @@ Run > mocha-store-test, or use the toolbar. After lauch, run from the Run consol
 
 ### Test plan
 The tests were divided into the following intentions:
-- API request interaction for each resource, collection, verb, request data validation, and response data
-- data persistence integration
-- acceptance test for workflows
+- unit: API request interaction for each resource, collection, verb, request data validation, and response data
+- integration: data persistence integration
+- acceptance: test for workflows
+
+Caveats:
+-- avoid complicating unit tests, stick to the simplest test of one API request/response at a time
 
 ### Test spec structure
 After a first false start, the following spec structure was used. The key is to use a fluent, hierarchical structure
