@@ -77,8 +77,11 @@ describe('order', function() {
                     })
                 })
                 describe('hypermedia link', function() {
+                    it('for self', function() {
+                        expect(res.body.order.links.self.uri).to.equal('/orders/1234')
+                    })
                     it('for payment', function() {
-                        expect(res.body.order.links.payment).to.eql({ uri: '/payment/order/1234' })
+                        expect(res.body.order.links.payment.uri).to.equal('/payment/order/1234')
                     })
                 })
             })

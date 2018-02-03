@@ -80,11 +80,14 @@ Example entity template:
 Tip: continuously review the spec report to check if the tests are structured fluently. Such commits are like to be described
 as "Refactor test: improve fluent structure".
 
-## Notes
+### Notes
 Common fluent test refactorings:
 
 * Refactor test: better fluent structure
 * Refactor test: extract fixture (there's a bit to this: in it, remove done, comment out old code except asserts)
+
+## Hypermedia links
+I have some questions about hypermedia links
 
 ### Hypermedia link (next)
 
@@ -250,3 +253,5 @@ http://intercoolerjs.org/2016/05/08/hatoeas-is-for-humans.html
 Blog on hAPI, FoxyCart: https://medium.com/@lukestokes/why-your-colleagues-still-don-t-understand-hypermedia-apis-1a5a2cf82540
 
 http://willi.am/node-mocha-supertest/
+
+https://www.futurehosting.com/blog/will-json-feed-take-the-place-of-rss-and-atom/

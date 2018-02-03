@@ -26,8 +26,12 @@ module.exports = function() {
         if (_.isUndefined(req.body.order.drink)) {
             return sendErrorStatusMessage(res, 400, 'missing drink object')
         }
+        const links = {
+            self: { uri: '/orders/1234' },
+            payment: { uri: '/payment/order/1234' }
+        }
         res.status(201)
-        res.send({order: { drink: 'latte', cost: '3.00', links: { payment: { uri: '/payment/order/1234' } } } })
+        res.send({order: { drink: 'latte', cost: '3.00', links: links } })
     })
 
     app.options('/orders/:orderId', function(req, res) {
