@@ -50,11 +50,16 @@ module.exports = function() {
         if (_.isUndefined(req.body.order)) {
             return sendErrorStatusMessage(res, 400, 'missing order object')
         }
-        if (_.isUndefined(req.body.order.additions)) {
+        const validKeys = [ 'additions', 'status' ]
+        if (_.isEmpty(_.intersection(_.keys(req.body.order), validKeys))) {
+        // if (_.isUndefined(req.body.order.additions)) {
             return sendErrorStatusMessage(res, 400, 'invalid update')
         }
         if (req.params.orderId === '2') {
             return sendErrorStatusMessage(res, 409, 'order already completed')
+        }
+        if (req.body.order.status && req.body.order.status !== 'preparing') {
+            return sendErrorStatusMessage(res, 400, 'invalid order status')
         }
         var updatedOrder = _.extend({ price: '4.00' }, defaultOrder, req.body.order)
         res.status(200)

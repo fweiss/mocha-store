@@ -184,6 +184,31 @@ describe('order', function() {
                     })
                 })
             })
+            describe('status preparing', function() {
+                describe('error when', function() {
+                    it('invalid status', function(done) {
+                        api.put('/orders/1').send({ order: { status: 'xxxx' } }).end(function(err, res) {
+                            expect(res.status).to.equal(400)
+                            expect(res.body.error).to.contain('invalid order status')
+                            done()
+                        })
+                    })
+
+                })
+                describe('response', function() {
+                    var res
+                    beforeEach(function(done) {
+                        const orderUpdate = { order: { status: 'preparing' }}
+                        api.put('/orders/1').send(orderUpdate).end(function(err, response) {
+                            res = response
+                            done()
+                        })
+                    })
+                    it('status', function() {
+                        expect(res.body.order.status).to.equal('preparing')
+                    })
+                })
+            })
         })
     })
     describe('collection', function() {
