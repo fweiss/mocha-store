@@ -52,12 +52,48 @@ describe('payment', function() {
                     done()
                 })
             })
-            it('no card number', function(done) {
-                api.put('/payments/order/1').send({ payment: {} }).end(function(err, res) {
-                    expect(res.status).to.equal(400)
-                    expect(res.body.error).to.contain('no card number')
-                    done()
+            describe('payment', function() {
+                // var res
+                // beforeEach(function(done) {
+                //     api.put('/payments/order/1').send({ payment: {} }).end(function(err, response) {
+                //         res = response
+                //         done()
+                //     })
+                // })
+                it('no card number', function(done) {
+                    api.put('/payments/order/1').send({ payment: {} }).end(function(err, res) {
+                        expect(res.status).to.equal(400)
+                        expect(res.body.error).to.contain('no card number')
+                        done()
+                    })
                 })
+                it('no expiration date', function(done) {
+                    api.put('/payments/order/1').send({ payment: { cardNumber: '123' } }).end(function(err, res) {
+                        expect(res.status).to.equal(400)
+                        expect(res.body.error).to.contain('no expiration date')
+                        done()
+                    })
+                })
+                it('no cardmember name', function(done) {
+                    api.put('/payments/order/1').send({ payment: { cardNumber: '123', expirationDate: '20180201' } }).end(function(err, res) {
+                        expect(res.status).to.equal(400)
+                        expect(res.body.error).to.contain('no cardholder name')
+                        done()
+                    })
+               })
+                it('no amount', function(done) {
+                    api.put('/payments/order/1').send({ payment: { cardNumber: '123', expirationDate: '20180201', cardholderName: 'John Doe' } }).end(function(err, res) {
+                        expect(res.status).to.equal(400)
+                        expect(res.body.error).to.contain('no amount')
+                        done()
+                    })
+                })
+            })
+        })
+        it('success', function(done) {
+            api.put('/payments/order/1').send({ payment: { cardNumber: '123', expirationDate: '20180201', cardholderName: 'John Doe', amount: '4.40' } }).end(function(err, res) {
+                expect(res.status).to.equal(200)
+                done()
             })
         })
     })

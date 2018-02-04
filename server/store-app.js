@@ -87,7 +87,20 @@ module.exports = function() {
         if (_.isUndefined(req.body.payment)) {
             return sendErrorStatusMessage(res, 400, 'no payment object')
         }
-        return sendErrorStatusMessage(res, 400, 'no card number')
+        if (_.isUndefined(req.body.payment.cardNumber)) {
+            return sendErrorStatusMessage(res, 400, 'no card number')
+        }
+        if (_.isUndefined(req.body.payment.expirationDate)) {
+            return sendErrorStatusMessage(res, 400, 'no expiration date')
+        }
+        if (_.isUndefined(req.body.payment.cardholderName)) {
+            return sendErrorStatusMessage(res, 400, 'no cardholder name')
+        }
+        if (_.isUndefined(req.body.payment.amount)) {
+            return sendErrorStatusMessage(res, 400, 'no amount')
+        }
+        res.status(200)
+        res.send({})
     })
 
     return app;
