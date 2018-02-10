@@ -146,6 +146,16 @@ Hmm, there are two shouldjs libraries?
 
 This one is recommended by mocha, uses expect style, dot chaining, but not getter assertions.
 
+## TDD with mongodb
+The first pass of TDD used in-process API tsts of the express routes using fakes and stubs.
+The design at this point reflects to API, with all the verbs, validations, and responses.
+In the next pass, those fakes and stubs will be replaced with mongodb objects and possibly am in-memory test double.
+Or should the db be abstracted with a DAO layer?
+
+https://semaphoreci.com/community/tutorials/a-tdd-approach-to-building-a-todo-api-using-node-js-and-mongodb
+
+https://github.com/mockgoose/Mockgoose
+
 ## IntelliJ notes
 fix: don't use semicolom to terminate statement in new code
 
