@@ -100,7 +100,7 @@ module.exports = function() {
             return sendErrorStatusMessage(res, 400, 'no amount')
         }
         res.status(200)
-        res.send({})
+        res.send({ payment: { amount: req.body.payment.amount }})
     })
 
     return app;

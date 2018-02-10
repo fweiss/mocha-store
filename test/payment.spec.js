@@ -96,5 +96,19 @@ describe('payment', function() {
                 done()
             })
         })
+        describe('response', function() {
+            var res
+            beforeEach(function(done) {
+                const payment = { payment: { cardNumber: '1234', expirationDate: '1802', cardholderName: 'John Doe', amount: '3.40' } }
+                api.put('/payments/order/3').send(payment).end(function(err, response) {
+                    expect(response.status).to.equal(200)
+                    res = response
+                    done()
+                })
+            })
+            it('amount', function() {
+                expect(res.body.payment.amount).to.equal('3.40')
+            })
+        })
     })
 })
