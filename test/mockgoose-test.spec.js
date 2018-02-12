@@ -27,9 +27,9 @@ describe.only('db2', function() {
     beforeEach(function(done) {
         mockgoose.helper.reset().then(function() {
 
-            var schema = new mongoose.Schema({ name: 'string', size: 'string' });
-            var Tank = mongoose.model('Tank', schema);
-            var small = new Tank({ size: 'small'})
+            var schema = new mongoose.Schema({ drink: 'string', cost: 'string' });
+            var Order = mongoose.model('Order', schema);
+            var small = new Order({ drink: 'latte', cost: '3.40'})
             small.save(function() {
                 done()
             })
@@ -56,7 +56,9 @@ describe.only('db2', function() {
     it('gets order', function(done) {
         api.get('/test').end(function(err, res) {
             expect(res.body.length).to.be(1)
-            expect(res.body[0].size).to.eql('small')
+            const order = res.body[0]
+            expect(order.drink).to.eql('latte')
+            expect(order.cost).to.be('3.40')
             done()
         })
     })
