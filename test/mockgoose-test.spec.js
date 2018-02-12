@@ -6,6 +6,8 @@ var request = require('supertest')
 //
 // mockgoose(mongoose)
 
+// https://github.com/Mockgoose/Mockgoose/issues/6
+
 var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
 
@@ -41,7 +43,15 @@ describe.only('db2', function() {
         //     done();
         // });
     })
-   it('gets order', function(done) {
+    it('puts order', function(done) {
+        const newOrder = { drink: 'mocha', cost: '4.40' }
+        api.post('/test').send(newOrder).end(function(err, res) {
+            const Order = mongoose.model('Order')
+            done()
+        })
+    })
+
+    it('gets order', function(done) {
         api.get('/test').end(function(err, res) {
             expect(res.body.length).to.be(1)
             const order = res.body[0]
@@ -50,6 +60,5 @@ describe.only('db2', function() {
             done()
         })
     })
-
 })
 
