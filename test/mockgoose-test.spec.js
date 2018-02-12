@@ -16,24 +16,20 @@ describe.only('db2', function() {
     var app = require('../server/mockgoose-test')(mongoose);
     var api = request(app);
     before(function(done) {
-        // mockgoose.helper.reset().then(function() {
-            mockgoose.prepareStorage().then(function () {
-                mongoose.connect('mongodb://example.com/TestingDB', function (err) {
-                    done(err);
-                });
+        mockgoose.prepareStorage().then(function () {
+            mongoose.connect('mongodb://example.com/TestingDB', function (err) {
+                done(err);
             });
-        // })
+        });
     })
     beforeEach(function(done) {
         mockgoose.helper.reset().then(function() {
-
             var schema = new mongoose.Schema({ drink: 'string', cost: 'string' });
             var Order = mongoose.model('Order', schema);
             var small = new Order({ drink: 'latte', cost: '3.40'})
             small.save(function() {
                 done()
             })
-            // done()
         })
 
         // create and insert two dummy docs
@@ -45,15 +41,7 @@ describe.only('db2', function() {
         //     done();
         // });
     })
-    // it('works', function(done) {
-    //     var Tank = mongoose.model('Tank')
-    //     Tank.find({ }, 'name size', function(err, tasks) {
-    //         expect(tasks.length).to.be(1)
-    //         expect(tasks[0].size).to.be('small')
-    //         done()
-    //     })
-    // })
-    it('gets order', function(done) {
+   it('gets order', function(done) {
         api.get('/test').end(function(err, res) {
             expect(res.body.length).to.be(1)
             const order = res.body[0]
