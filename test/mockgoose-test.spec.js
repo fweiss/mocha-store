@@ -17,18 +17,23 @@ var mockgoose = new Mockgoose(mongoose);
 describe.only('db2', function() {
     var app = require('../server/mockgoose-test')(mongoose);
     var api = request(app);
+    var Order
+    // create the schema once per test suit
     before(function(done) {
         mockgoose.prepareStorage()
             .then(function () {
                 return mongoose.connect('mongodb://example.com/TestingDB')
             })
+            .then(function() {
+                var schema = new mongoose.Schema({ drink: 'string', cost: 'string' });
+                Order = mongoose.model('Order', schema);
+            })
             .then(function() { done() })
             .catch(function(err) { done(err) })
     })
+    // create a fresh documents test fixture for each test
     beforeEach(function(done) {
         mockgoose.helper.reset().then(function() {
-            var schema = new mongoose.Schema({ drink: 'string', cost: 'string' });
-            var Order = mongoose.model('Order', schema);
             var small = new Order({ drink: 'latte', cost: '3.40'})
             small.save(function() {
                 done()
