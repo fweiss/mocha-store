@@ -49,15 +49,19 @@ describe.only('db2', function() {
         //     done();
         // });
     })
-    it('puts order', function(done) {
+    it('post order', function(done) {
         const newOrder = { drink: 'mocha', cost: '4.40' }
         api.post('/test').send(newOrder).end(function(err, res) {
-            const Order = mongoose.model('Order')
-            done()
+            const id = res.body._id
+            Order.find({ _id: id }, 'drink cost').then(function(orders) {
+                expect(orders.length).to.be(1)
+                expect(orders[0].drink).to.be('mocha')
+                done()
+            }).catch(function(err) { done(err) })
         })
     })
 
-    it('gets order', function(done) {
+    it('get order', function(done) {
         api.get('/test').end(function(err, res) {
             expect(res.body.length).to.be(1)
             const order = res.body[0]
