@@ -18,11 +18,12 @@ describe.only('db2', function() {
     var app = require('../server/mockgoose-test')(mongoose);
     var api = request(app);
     before(function(done) {
-        mockgoose.prepareStorage().then(function () {
-            mongoose.connect('mongodb://example.com/TestingDB', function (err) {
-                done(err);
-            });
-        });
+        mockgoose.prepareStorage()
+            .then(function () {
+                return mongoose.connect('mongodb://example.com/TestingDB')
+            })
+            .then(function() { done() })
+            .catch(function(err) { done(err) })
     })
     beforeEach(function(done) {
         mockgoose.helper.reset().then(function() {
