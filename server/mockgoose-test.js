@@ -5,14 +5,14 @@ module.exports = function(mongoose) {
 
     app.get('/test', function(req, res) {
         var Order = mongoose.model('Order')
-        Order.find({ }, 'drink cost', function(err, tasks) {
+        Order.find({ }, 'drink cost', function(err, orders) {
             res.status(200)
-            res.send(tasks)
+            res.send(orders)
         })
     })
     app.post('/test', function(req, res) {
         var Order = mongoose.model('Order')
-        Order.create(req.body, function(err, order) {
+        Order.create(req.body.order, function(err, order) {
             if (err) {
                 res.status(500)
                 res.send(err)

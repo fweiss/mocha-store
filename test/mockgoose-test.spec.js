@@ -50,7 +50,7 @@ describe.only('db2', function() {
         // });
     })
     it('post order', function(done) {
-        const newOrder = { drink: 'mocha', cost: '4.40' }
+        const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
         api.post('/test').send(newOrder).end(function(err, res) {
             const id = res.body._id
             Order.find({ _id: id }, 'drink cost').then(function(orders) {
