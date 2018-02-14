@@ -25,7 +25,16 @@ describe.only('db2', function() {
                 return mongoose.connect('mongodb://example.com/TestingDB')
             })
             .then(function() {
-                var schema = new mongoose.Schema({ drink: 'string', cost: 'string' });
+                var schema = new mongoose.Schema({
+                    drink:  {
+                        type: 'string',
+                        required: [ true, 'missing drink' ]
+                    },
+                    cost: {
+                        type: 'string',
+                        required: [ true, 'missing cost' ]
+                    }
+                });
                 Order = mongoose.model('Order', schema);
             })
             .then(function() { done() })
@@ -49,9 +58,19 @@ describe.only('db2', function() {
         //     done();
         // });
     })
+    it('post order error', function(done) {
+        const newOrder = { order: { drinky: 'mocha', costy: '4.40' } }
+        api.post('/test').send(newOrder).end(function(err, res) {
+            expect(res.statusCode).to.be(400)
+            // map the mongoose to api error schema
+            expect(res.body.errors.drink.message).to.contain('missing drink')
+            done()
+        })
+    })
     it('post order', function(done) {
         const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
         api.post('/test').send(newOrder).end(function(err, res) {
+            expect(res.statusCode).to.be(201)
             const id = res.body._id
             Order.find({ _id: id }, 'drink cost').then(function(orders) {
                 expect(orders.length).to.be(1)

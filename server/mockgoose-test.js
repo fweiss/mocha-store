@@ -1,4 +1,5 @@
 module.exports = function(mongoose) {
+    const _ = require('underscore')
     const express = require('express')
     const app = express()
     app.use(require('body-parser').json())
@@ -14,8 +15,10 @@ module.exports = function(mongoose) {
         var Order = mongoose.model('Order')
         Order.create(req.body.order, function(err, order) {
             if (err) {
-                res.status(500)
+                // there may also be 500, non validation errors
+                res.status(400)
                 res.send(err)
+                return
             }
             res.status(201)
             res.send(order)
