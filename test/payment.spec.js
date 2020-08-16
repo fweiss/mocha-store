@@ -1,7 +1,7 @@
 var expect = require('expect.js')
 var request = require('supertest')
 
-describe('payment', function() {
+describe('payments', function() {
     const app = require('../server/store-app')();
     const api = request(app);
     describe('options', function() {
