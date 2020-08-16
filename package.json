@@ -14,14 +14,15 @@
   "devDependencies": {
     "expect.js": "^0.3.1",
     "mocha": "^4.0.1",
-    "mockgoose": "^7.3.5",
+    "mockgoose": "^8.0.4",
     "supertest": "^3.0.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.16.2",
     "forever": "^0.15.2",
-    "mongoose": "^5.0.4",
-    "underscore": "^1.8.3"
+    "mongoose": "^5.10.0",
+    "underscore": "^1.10.2",
+    "xml2js": "^0.4.23"
   }
 }

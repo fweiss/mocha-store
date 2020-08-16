@@ -11,6 +11,10 @@ var request = require('supertest')
 var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
 
+// to suppress deprecation warnings
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+
 var Mockgoose = require('mockgoose').Mockgoose;
 var mockgoose = new Mockgoose(mongoose);
 
@@ -22,7 +26,7 @@ describe.only('db2', function() {
     before(function(done) {
         mockgoose.prepareStorage()
             .then(function () {
-                return mongoose.connect('mongodb://example.com/TestingDB')
+                return mongoose.connect('mongodb://example.com:27017/TestingDB')
             })
             .then(function() {
                 var schema = new mongoose.Schema({
