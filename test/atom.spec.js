@@ -41,7 +41,7 @@ describe('atom feed', function() {
         describe('response', function() {
             var res
             beforeEach(function(done) {
-                api.get('/orders').end(function(err, response) {
+                api.get('/orders').set('Accept', 'application/atom+xml').end(function(err, response) {
                     res = response
                     done()
                 })

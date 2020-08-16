@@ -189,6 +189,15 @@ describe('orders', function() {
     })
     describe('collection', function() {
         var res
+        describe('default content type', () => {
+            it('application/json', (done) => {
+                api.get('/orders').set('Accept', '*/*')
+                    .end(function(err, response) {
+                        expect(response.type).to.equal('application/json')
+                        done()
+                    })
+            })
+        })
         beforeEach((done) => {
             api.get('/orders').set('Accept', 'application/json')
                 .end(function(err, response) {

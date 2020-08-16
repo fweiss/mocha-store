@@ -72,15 +72,20 @@ module.exports = function(dao) {
     })
     app.get('/orders', function(req, res) {
         let a = req.accepts('application/atom+xml')
-        if (req.accepts('application/atom+xml')) {
+        if (req.accepts('application/json') === 'application/json') {
+            result = dao.getOrders()
+            res.set('content-type', 'application/json')
+            res.status(200)
+            res.send(result)
+        } else if (req.accepts('application/atom+xml') === 'application/atom+xml') {
             res.status(200)
             res.set('content-type', 'application/atom+xml')
             res.send('<feed xmlns="http://www.w3.org/2005/Atom"><updated>20180201</updated></feed>')
         } else {
             result = dao.getOrders()
-            res.set('content-type', 'application/json')
-            res.status(200)
-            res.send(result)
+            res.set('content-type', 'text/plain')
+            res.status(401)
+            res.send('unsupported content type')
         }
     })
 
