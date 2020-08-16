@@ -20,7 +20,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.16.2",
-    "forever": "^0.15.2",
+    "forever": "^3.0.0",
     "mongoose": "^5.10.0",
     "underscore": "^1.10.2",
     "xml2js": "^0.4.23"
