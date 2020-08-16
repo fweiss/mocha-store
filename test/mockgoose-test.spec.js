@@ -19,7 +19,7 @@ mongoose.set('useUnifiedTopology', true);
 var Mockgoose = require('mockgoose').Mockgoose;
 var mockgoose = new Mockgoose(mongoose);
 
-describe.only('db2', function() {
+describe('db2', function() {
     var app = require('../server/mockgoose-test')(mongoose);
     var api = request(app);
     var Order

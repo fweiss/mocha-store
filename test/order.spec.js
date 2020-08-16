@@ -1,6 +1,7 @@
 var expect = require('expect.js')
 var request = require('supertest')
 const xml2js = require('xml2js')
+const fakeDao = require('./fake-dao')
 
 require('superagent').parse['application/atom+xml'] = function(res, fn) {
     res.text = '';
@@ -27,7 +28,7 @@ require('superagent').parse['application/atom+xml'] = function(res, fn) {
 }
 
 describe('order', function() {
-    var app = require('../server/store-app')();
+    var app = require('../server/store-app')(fakeDao);
     var api = request(app);
     describe('entity', function() {
         describe('post', function() {
