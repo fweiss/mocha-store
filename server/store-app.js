@@ -1,4 +1,8 @@
 module.exports = function(dao) {
+
+    if (dao === undefined) {
+        throw new Error('server failed: invalid dao')
+    }
     var express = require('express');
     var app = express();
     var _ = require('underscore');

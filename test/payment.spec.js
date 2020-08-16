@@ -1,8 +1,10 @@
 var expect = require('expect.js')
 var request = require('supertest')
 
+const dao = require('./fake-dao')
+
 describe('payments', function() {
-    const app = require('../server/store-app')();
+    const app = require('../server/store-app')(dao);
     const api = request(app);
     describe('options', function() {
         describe('error when', function() {
