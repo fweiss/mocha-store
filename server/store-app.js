@@ -71,9 +71,20 @@ module.exports = function(dao) {
         res.send({ order:  updatedOrder })
     })
     app.get('/orders', function(req, res) {
-        res.status(200)
-        res.set('content-type', 'application/atom+xml')
-        res.send('<feed xmlns="http://www.w3.org/2005/Atom"><updated>20180201</updated></feed>')
+        let a = req.accepts('application/atom+xml')
+        if (req.accepts('application/atom+xml')) {
+            res.status(200)
+            res.set('content-type', 'application/atom+xml')
+            res.send('<feed xmlns="http://www.w3.org/2005/Atom"><updated>20180201</updated></feed>')
+        } else {
+            result = dao.getOrders()
+            res.set('content-type', 'application/json')
+            res.status(200)
+            res.send({ orders: [
+                { drink: 'latte', price:  '3.01 ' },
+                { drink: 'mocha', price: '4.00 '}
+            ]})
+        }
     })
 
     app.options('/payments/orders/:orderId', function(req, res) {

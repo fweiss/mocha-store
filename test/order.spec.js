@@ -188,6 +188,19 @@ describe('orders', function() {
         })
     })
     describe('collection', function() {
-        // todo non-atom feed
+        var res
+        beforeEach((done) => {
+            api.get('/orders').set('Accept', 'application/json')
+                .end(function(err, response) {
+                res = response
+                done()
+            })
+        })
+        it('status code', () => {
+            expect(res.statusCode).to.equal(200)
+        })
+        it('result', () => {
+            expect (res.body.orders.length).to.equal(2)
+        })
     })
 })
