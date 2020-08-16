@@ -80,10 +80,7 @@ module.exports = function(dao) {
             result = dao.getOrders()
             res.set('content-type', 'application/json')
             res.status(200)
-            res.send({ orders: [
-                { drink: 'latte', price:  '3.01 ' },
-                { drink: 'mocha', price: '4.00 '}
-            ]})
+            res.send(result)
         }
     })
 

@@ -4,7 +4,7 @@ module.exports = {
         return {
             orders: [
                 { drink: 'latte', cost: '3.00' },
-                {drink: 'mocha', cost: '4.00' }
+                { drink: 'mocha', cost: '4.00' }
             ]
         }
     },
