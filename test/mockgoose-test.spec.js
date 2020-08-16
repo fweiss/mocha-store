@@ -26,7 +26,8 @@ describe.only('db2', function() {
     before(function(done) {
         mockgoose.prepareStorage()
             .then(function () {
-                return mongoose.connect('mongodb://example.com:27017/TestingDB')
+                const phonyConnectUri = 'mongodb://example.com:27017/TestingDB'
+                return mongoose.connect(phonyConnectUri)
             })
             .then(function() {
                 var schema = new mongoose.Schema({
