@@ -1,5 +1,6 @@
 var expect = require('expect.js')
 var request = require('supertest')
+const schemas = require('../server/schemas')
 
 // var mockgoose = require('mockgoose')
 // var mongoose = require('mongoose')
@@ -30,17 +31,8 @@ describe.only('db2', function() {
                 return mongoose.connect(phonyConnectUri)
             })
             .then(function() {
-                var schema = new mongoose.Schema({
-                    drink:  {
-                        type: 'string',
-                        required: [ true, 'missing drink' ]
-                    },
-                    cost: {
-                        type: 'string',
-                        required: [ true, 'missing cost' ]
-                    }
-                });
-                Order = mongoose.model('Order', schema);
+                var orderScheme = new mongoose.Schema(schemas.orderSchema);
+                Order = mongoose.model('Order', orderScheme);
             })
             .then(function() { done() })
             .catch(function(err) { done(err) })
