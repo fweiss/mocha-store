@@ -40,38 +40,47 @@ describe('store', function() {
     // create a fresh documents test fixture for each test
     beforeEach(function(done) {
         mockgoose.helper.reset().then(function() {
-            var small = new Order({ drink: 'latte', cost: '3.40'})
-            small.save(function() {
+            var orederLatte = new Order({ drink: 'latte', cost: '3.40'})
+            orederLatte.save(function() {
                 done()
             })
         })
     })
-    describe('order post', () => {
-        const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
-        var id
-        beforeEach((done) => {
-            api.post('/test').send(newOrder).end(function(err, res) {
-                expect(res.statusCode).to.be(201)
-                id = res.body._id
-                done()
+    describe('order', () => {
+        describe('post', () => {
+            const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
+            var id
+            beforeEach((done) => {
+                api.post('/test').send(newOrder).end(function(err, res) {
+                    expect(res.statusCode).to.be(201)
+                    id = res.body._id
+                    done()
+                })
+            })
+            it('confirm drink', (done) => {
+                Order.find({ _id: id }, 'drink cost').then(function(orders) {
+                    expect(orders.length).to.be(1)
+                    expect(orders[0].drink).to.be('mocha')
+                    done()
+                }).catch(function(err) { done(err) })
             })
         })
-        it('confirm drink', (done) => {
-            Order.find({ _id: id }, 'drink cost').then(function(orders) {
-                expect(orders.length).to.be(1)
-                expect(orders[0].drink).to.be('mocha')
-                done()
-            }).catch(function(err) { done(err) })
+        describe('get', () => {
+            var order
+            beforeEach((done) => {
+                api.get('/test').end(function(err, res) {
+                    expect(res.body.length).to.be(1)
+                    order = res.body[0]
+                    done()
+                })
+            })
+            it('has drink', () => {
+                expect(order.drink).to.eql('latte')
+            })
+            it('has cost', () => {
+                expect(order.cost).to.be('3.40')
+            })
         })
     })
-    it('get order', function(done) {
-        api.get('/test').end(function(err, res) {
-            expect(res.body.length).to.be(1)
-            const order = res.body[0]
-            expect(order.drink).to.eql('latte')
-            expect(order.cost).to.be('3.40')
-            done()
-        })
-    })
-})
+ })
 
