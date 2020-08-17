@@ -1,5 +1,10 @@
 var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
+
+// to suppress deprecation warnings
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+
 const schemas = require('../server/schemas')
 
 const phonyConnectUri = 'mongodb://localhost:27017/AcceptanceDB'
@@ -10,7 +15,11 @@ const Order = mongoose.model('Order', orderScheme)
 
 module.exports = {
 
-    getOrders: () => {},
+    mongoose: mongoose,
+
+    getOrders: async () => {
+        return await Order.find({})
+    },
     addOrder: async (order) => {
         order.cost = '3.33'
 
