@@ -20,7 +20,7 @@ module.exports = function(dao) {
         res.send({error: message})
     }
 
-    app.post('/orders', function(req, res) {
+    app.post('/orders', async function(req, res) {
         if (req.headers['content-length'] === '0') {
             return sendErrorStatusMessage(res, 400, 'empty request body')
         }
@@ -30,7 +30,7 @@ module.exports = function(dao) {
         if (_.isUndefined(req.body.order.drink)) {
             return sendErrorStatusMessage(res, 400, 'missing drink object')
         }
-        const result = dao.addOrder(req.body.order)
+        const result = await dao.addOrder(req.body.order)
         // todo check result.error
         response = result.data
         response.order.links =  {

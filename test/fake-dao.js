@@ -16,7 +16,7 @@ module.exports = {
             ]
         }
     },
-    addOrder: function(order) {
+    addOrder: async function(order) {
         return {
             entityId: 1234,
             data: {
