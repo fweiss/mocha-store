@@ -32,10 +32,10 @@ module.exports = function(dao) {
         }
         const result = await dao.addOrder(req.body.order)
         // todo check result.error
-        response = result.data
+        response = { order: result }
         response.order.links =  {
-            self: { uri: '/orders/' + result.entityId },
-            payment: { uri: '/payment/order/' + result.entityId }
+            self: { uri: '/orders/' + result._id },
+            payment: { uri: '/payment/order/' + result._id }
         }
 
         res.status(201)

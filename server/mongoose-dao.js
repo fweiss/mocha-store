@@ -14,15 +14,24 @@ module.exports = {
     addOrder: async (order) => {
         order.cost = '3.33'
 
-        Order.create(order)
-            .then(function(data) { console.log('aaaaa' + data) })
-            .catch(function(err) { console.log('eeeerr' + err)})
-        return {
-            entityId: 1234,
-            data: {
-                order: { drink: 'latte', cost: '3.00' }
-            }
-        }
+        return await Order.create(order)
+            // .then(function(data) {
+            //     return {
+            //         entityId: 1234,
+            //         data: {
+            //             order: { drink: 'latte', cost: '3.00' }
+            //         }
+            //     }
+            // })
+            // .catch(function(err) { console.log('eeeerr' + err)})
+
+
+        // return {
+        //     entityId: 1234,
+        //     data: {
+        //         order: { drink: 'latte', cost: '3.00' }
+        //     }
+        // }
     }
 
 }
