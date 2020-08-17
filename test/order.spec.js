@@ -199,8 +199,7 @@ describe('orders', function() {
             })
         })
         beforeEach((done) => {
-            api.get('/orders').set('Accept', 'application/json')
-                .end(function(err, response) {
+            api.get('/orders').set('Accept', 'application/json').end(function(err, response) {
                 res = response
                 done()
             })

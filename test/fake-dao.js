@@ -1,6 +1,6 @@
 module.exports = {
 
-    getOrders: function() {
+    getOrders: async function() {
         return {
             orders: [
                 { drink: 'latte', cost: '3.00' },
