@@ -58,9 +58,11 @@ describe('store', function() {
         describe('post', () => {
             const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
             var id
+            var resOrder
             beforeEach((done) => {
                 api.post('/orders').send(newOrder).end(function(err, res) {
                     expect(res.statusCode).to.be(201)
+                    resOrder = res.body.order
                     id = res.body.order._id
                     done()
                 })
@@ -71,6 +73,9 @@ describe('store', function() {
                     expect(orders[0].drink).to.be('mocha')
                     done()
                 }).catch(function(err) { done(err) })
+            })
+            it("hyperlinks present", () => {
+                expect(resOrder).to.have.property('links')
             })
         })
         describe('get', () => {

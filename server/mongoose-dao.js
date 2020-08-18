@@ -28,7 +28,15 @@ module.exports = {
     addOrder: async (order) => {
         order.cost = '3.33'
 
-        return await Order.create(order)
+        // return await Order.create(order)
+
+        const o = await Order.create(order)
+        // return plain object to allow caller to decorate
+        return o.toObject()
+
+
+
+
             // .then(function(data) {
             //     return {
             //         entityId: 1234,
