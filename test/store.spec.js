@@ -2,19 +2,8 @@ var expect = require('expect.js')
 var request = require('supertest')
 const schemas = require('../server/schemas')
 
-// var mockgoose = require('mockgoose')
-// var mongoose = require('mongoose')
-//
-// mockgoose(mongoose)
-
-// https://github.com/Mockgoose/Mockgoose/issues/6
-
 var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
-
-// to suppress deprecation warnings
-// mongoose.set('useNewUrlParser', true);
-// mongoose.set('useUnifiedTopology', true);
 
 var Mockgoose = require('mockgoose').Mockgoose;
 var mockgoose = new Mockgoose(mongoose);
@@ -33,8 +22,6 @@ describe('store', function() {
         mockgoose.prepareStorage()
             .then(function () {
                 dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
-                //     const phonyConnectUri = 'mongodb://example.com:27017/TestingDB'
-            //     return mongoose.connect(phonyConnectUri)
             })
             .then(function() {
                 // var orderScheme = new mongoose.Schema(schemas.orderSchema);
@@ -45,7 +32,6 @@ describe('store', function() {
     })
     // create a fresh documents test fixture for each test
     beforeEach(function(done) {
-        // fixme reset not working
         const c = mongoose.connections
         mockgoose.helper.reset().then(function() {
             var orederLatte = new Order({ drink: 'americano', cost: '2.40'})
