@@ -1,21 +1,26 @@
-var Mongoose = require('mongoose').Mongoose;
-var mongoose = new Mongoose();
-
-// to suppress deprecation warnings
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useUnifiedTopology', true);
+// var Mongoose = require('mongoose').Mongoose;
+// var mongoose = new Mongoose();
 
 const schemas = require('../server/schemas')
 
-const phonyConnectUri = 'mongodb://localhost:27017/AcceptanceDB'
-mongoose.connect(phonyConnectUri)
+// const phonyConnectUri = 'mongodb://localhost:27017/AcceptanceDB'
+// mongoose.connect(phonyConnectUri)
 
-var orderScheme = new mongoose.Schema(schemas.orderSchema)
-const Order = mongoose.model('Order', orderScheme)
+var Order
 
 module.exports = {
 
-    mongoose: mongoose,
+    connect: (_mongoose, uri) => {
+        mongoose = _mongoose
+
+        // to suppress deprecation warnings
+        mongoose.set('useNewUrlParser', true)
+        mongoose.set('useUnifiedTopology', true)
+
+        mongoose.connect(uri)
+        const orderScheme = new mongoose.Schema(schemas.orderSchema)
+        Order = mongoose.model('Order', orderScheme)
+    },
 
     getOrders: async () => {
         return await Order.find({})

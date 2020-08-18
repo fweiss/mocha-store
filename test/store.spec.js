@@ -13,34 +13,40 @@ var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
 
 // to suppress deprecation warnings
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useUnifiedTopology', true);
+// mongoose.set('useNewUrlParser', true);
+// mongoose.set('useUnifiedTopology', true);
 
 var Mockgoose = require('mockgoose').Mockgoose;
 var mockgoose = new Mockgoose(mongoose);
 
+const dao = require('../server/mongoose-dao.js')
+
 describe('store', function() {
-    var app = require('../server/mockgoose-test')(mongoose);
+    // var app = require('../server/mockgoose-test')(mongoose);
+
+    dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
+    const app = require('../server/store-app.js')(dao)
     var api = request(app);
     var Order
     // create the schema once per test suit
     before(function(done) {
         mockgoose.prepareStorage()
-            .then(function () {
-                const phonyConnectUri = 'mongodb://example.com:27017/TestingDB'
-                return mongoose.connect(phonyConnectUri)
-            })
+            // .then(function () {
+            //     const phonyConnectUri = 'mongodb://example.com:27017/TestingDB'
+            //     return mongoose.connect(phonyConnectUri)
+            // })
             .then(function() {
-                var orderScheme = new mongoose.Schema(schemas.orderSchema);
-                Order = mongoose.model('Order', orderScheme);
+                // var orderScheme = new mongoose.Schema(schemas.orderSchema);
+                Order = mongoose.model('Order');
             })
             .then(function() { done() })
             .catch(function(err) { done(err) })
     })
     // create a fresh documents test fixture for each test
     beforeEach(function(done) {
+        // fixme reset not working
         mockgoose.helper.reset().then(function() {
-            var orederLatte = new Order({ drink: 'latte', cost: '3.40'})
+            var orederLatte = new Order({ drink: 'americano', cost: '2.40'})
             orederLatte.save(function() {
                 done()
             })
@@ -51,9 +57,9 @@ describe('store', function() {
             const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
             var id
             beforeEach((done) => {
-                api.post('/test').send(newOrder).end(function(err, res) {
+                api.post('/orders').send(newOrder).end(function(err, res) {
                     expect(res.statusCode).to.be(201)
-                    id = res.body._id
+                    id = res.body.order._id
                     done()
                 })
             })
@@ -68,7 +74,7 @@ describe('store', function() {
         describe('get', () => {
             var order
             beforeEach((done) => {
-                api.get('/test').end(function(err, res) {
+                api.get('/orders').end(function(err, res) {
                     expect(res.body.length).to.be(1)
                     order = res.body[0]
                     done()
