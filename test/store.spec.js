@@ -24,17 +24,18 @@ const dao = require('../server/mongoose-dao.js')
 describe('store', function() {
     // var app = require('../server/mockgoose-test')(mongoose);
 
-    dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
+    // dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
     const app = require('../server/store-app.js')(dao)
     var api = request(app);
     var Order
     // create the schema once per test suit
     before(function(done) {
         mockgoose.prepareStorage()
-            // .then(function () {
-            //     const phonyConnectUri = 'mongodb://example.com:27017/TestingDB'
+            .then(function () {
+                dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
+                //     const phonyConnectUri = 'mongodb://example.com:27017/TestingDB'
             //     return mongoose.connect(phonyConnectUri)
-            // })
+            })
             .then(function() {
                 // var orderScheme = new mongoose.Schema(schemas.orderSchema);
                 Order = mongoose.model('Order');
@@ -45,6 +46,7 @@ describe('store', function() {
     // create a fresh documents test fixture for each test
     beforeEach(function(done) {
         // fixme reset not working
+        const c = mongoose.connections
         mockgoose.helper.reset().then(function() {
             var orederLatte = new Order({ drink: 'americano', cost: '2.40'})
             orederLatte.save(function() {
@@ -81,10 +83,10 @@ describe('store', function() {
                 })
             })
             it('has drink', () => {
-                expect(order.drink).to.eql('latte')
+                expect(order.drink).to.eql('americano')
             })
             it('has cost', () => {
-                expect(order.cost).to.be('3.40')
+                expect(order.cost).to.be('2.40')
             })
         })
     })
