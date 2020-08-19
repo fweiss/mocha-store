@@ -89,6 +89,19 @@ Common fluent test refactorings:
 * Refactor test: better fluent structure
 * Refactor test: extract fixture (there's a bit to this: in it, remove done, comment out old code except asserts)
 
+### Integration tests
+- integrated app and database api
+- use mockgoose to build and tear down data fixtures
+- use mongoose to verify data mutations
+- can be run in-memory (future: mongodb-memory-server)
+
+### Acceptance tests
+- integrate app with acceptance test database
+- persistent data
+- database can be seeded
+- access via http
+- postman scenarios
+
 ## Hypermedia links
 I have some questions about hypermedia links
 
