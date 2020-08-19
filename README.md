@@ -95,12 +95,18 @@ Common fluent test refactorings:
 - use mongoose to verify data mutations
 - can be run in-memory (future: mongodb-memory-server)
 
+Files:
+- store.spec.js
+
 ### Acceptance tests
 - integrate app with acceptance test database
 - persistent data
 - database can be seeded
 - access via http
 - postman scenarios
+
+Files:
+- server.js
 
 ## Hypermedia links
 I have some questions about hypermedia links
