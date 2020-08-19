@@ -83,22 +83,7 @@ describe('store', function() {
                 expect(order.cost).to.be('2.40')
             })
         })
-        // describe.skip('get entity', () => {
-        //     let res
-        //     beforeEach((done) => {
-        //         api.get('/orders/' + americanoId).end(function(err, _res) {
-        //             res = _res
-        //             expect(res.statusCode).to.equal(200)
-        //             // expect(res.body.order.length).to.be(1)
-        //             // order = res.body[0]
-        //             expect(res.body).to.have.property('order')
-        //             done()
-        //         })
-        //     })
-        //     it('works', (done) => {
-        //     })
-        // })
-        describe('foo', () => {
+        describe('get entity', () => {
             let res
             beforeEach((done) => {
                 api.get('/orders/' + americanoId).then((_res) => {
