@@ -32,12 +32,15 @@ module.exports = {
     },
     getOrder: async (orderId) => {
         if (orderId === '2') {
-            return {
-                entityId: 1234,
-                data: {
-                    order: {drink: 'latte', cost: '3.00'}
-                }
-            }
+            return {  _id: '1234', drink: 'latte', cost: '3.00'}
+
+
+            // return {
+            //     entityId: 1234,
+            //     data: {
+            //         order: { drink: 'latte', cost: '3.00'}
+            //     }
+            // }
         } else if (orderId === '1') {
             throw new NotFoundError('not found')
         }

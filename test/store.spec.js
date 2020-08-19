@@ -99,14 +99,27 @@ describe('store', function() {
         //     })
         // })
         describe('foo', () => {
-            it('works', (done) => {
-                api.get('/orders/' + americanoId).then((res) => {
+            let res
+            beforeEach((done) => {
+                api.get('/orders/' + americanoId).then((_res) => {
+                    res = _res
                     expect(res.statusCode).to.equal(200)
                     expect(res.body).to.have.property('order')
                     done()
                 })
             })
-        })
+            it('status', () =>{
+                expect(res.statusCode).to.equal(200)
+            })
+            describe('hyperlinks', () => {
+                it('present', () => {
+                    expect(res.body.order).to.have.property('links')
+                })
+                it('have order id', () => {
+                    expect(res.body.order.links.self.uri).to.contain(americanoId.toString())
+                })
+            })
+         })
     })
  })
 

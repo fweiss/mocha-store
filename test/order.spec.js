@@ -226,7 +226,13 @@ describe('orders', function() {
                 describe('value', () => {
 
                 })
-                describe('hyperlink', () => {
+                describe('hyperlinks', () => {
+                    it('preset', () => {
+                        expect(res.body.order).to.have.property('links')
+                    })
+                    it('has self', () => {
+                        expect(res.body.order.links.self.uri).to.equal('/orders/1234')
+                    })
 
                 })
             })

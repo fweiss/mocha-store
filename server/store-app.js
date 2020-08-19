@@ -50,7 +50,10 @@ module.exports = function(dao) {
     app.get('/orders/:orderId', async function(req, res) {
         try {
             let result = await dao.getOrder(req.params.orderId)
-            response = { order: result }
+            let response = { order: result }
+            response.order.links = {
+                self: { uri: '/orders/' + result._id }
+            }
             res.status(200)
             res.send(response)
         }

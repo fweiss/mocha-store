@@ -40,7 +40,7 @@ module.exports = {
         if (o === null) {
             throw new NotFoundError('not found')
         }
-        return o
+        return o.toObject()
 }
 
 }
