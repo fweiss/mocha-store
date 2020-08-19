@@ -1,6 +1,8 @@
 // var Mongoose = require('mongoose').Mongoose;
 // var mongoose = new Mongoose();
 
+let { NotFoundError, InvalidParameterError} = require('./common-dao.js')
+
 const schemas = require('../server/schemas')
 
 // const phonyConnectUri = 'mongodb://localhost:27017/AcceptanceDB'
@@ -31,6 +33,14 @@ module.exports = {
         const o = await Order.create(order)
         // return plain object to allow caller to decorate
         return o.toObject()
-    }
+    },
+    getOrder: async (orderId) => {
+        // let o = await Order.findById(mongoose.Types.ObjectId("51bb793aca2ab77a3200000d"))
+        let o = await Order.findById(mongoose.Types.ObjectId(orderId))
+        if (o === null) {
+            throw new NotFoundError('not found')
+        }
+        return o
+}
 
 }

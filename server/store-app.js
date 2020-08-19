@@ -1,3 +1,8 @@
+// const NotFoundError = require('./common-dao.js')
+// const InvalidParameterError = require('./common-dao.js')
+
+let { NotFoundError, InvalidParameterError} = require('./common-dao.js')
+
 module.exports = function(dao) {
 
     if (dao === undefined) {
@@ -41,6 +46,26 @@ module.exports = function(dao) {
         res.status(201)
         // res.send({order: { drink: 'latte', cost: '3.00', links: links } })
         res.send(response)
+    })
+    app.get('/orders/:orderId', async function(req, res) {
+        try {
+            let result = await dao.getOrder(req.params.orderId)
+            response = { order: result }
+            res.status(200)
+            res.send(response)
+        }
+        catch (err) {
+            res.status(500)
+            let z = new NotFoundError('z')
+            let y = z instanceof NotFoundError
+            if (err instanceof InvalidParameterError) {
+                res.status(400)
+            } else if (err instanceof NotFoundError) {
+                res.status(404)
+            }
+
+            res.send('order error' + err)
+        }
     })
 
     app.options('/orders/:orderId', function(req, res) {
@@ -124,6 +149,7 @@ module.exports = function(dao) {
         res.status(200)
         res.send({ payment: { amount: req.body.payment.amount }})
     })
+
 
     return app;
 };

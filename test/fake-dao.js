@@ -6,6 +6,11 @@
 // note that since mongoose/mongo uses promises, this dao must follow suite,
 // using the ES6 async/await language support for promises
 
+// const NotFoundError = require('../server/common-dao.js')
+// const InvalidParameterError = require('../server/common-dao.js')
+
+let { NotFoundError, InvalidParameterError} = require('../server/common-dao.js')
+
 module.exports = {
 
     getOrders: async function() {
@@ -25,4 +30,18 @@ module.exports = {
         //     }
         // }
     },
+    getOrder: async (orderId) => {
+        if (orderId === '2') {
+            return {
+                entityId: 1234,
+                data: {
+                    order: {drink: 'latte', cost: '3.00'}
+                }
+            }
+        } else if (orderId === '1') {
+            throw new NotFoundError('not found')
+        }
+        throw new InvalidParameterError('invalid parameter')
+
+    }
 }

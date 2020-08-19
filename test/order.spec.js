@@ -186,6 +186,60 @@ describe('orders', function() {
                 })
             })
         })
+        describe('get', () => {
+            describe('error when', () => {
+                var res
+                describe('invalid request', () => {
+                    beforeEach((done) => {
+                        api.get('/orders/=').then((_res) => {
+                            res = _res
+                            done()
+                        })
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(400)
+                    })
+                })
+                describe('not found', () => {
+                    beforeEach((done) => {
+                        api.get('/orders/1').then((_res) => {
+                            res = _res
+                            done()
+                        })
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(404)
+                    })
+                })
+            })
+            describe('pending', () => {
+                let res
+                beforeEach((done) => {
+                    api.get('/orders/2').then((_res) => {
+                        res = _res
+                        done()
+                    })
+                })
+                it('status code', () => {
+                    expect(res.statusCode).to.equal(200)
+                })
+                describe('value', () => {
+
+                })
+                describe('hyperlink', () => {
+
+                })
+            })
+            describe('completed', () => {
+                describe('value', () => {
+
+                })
+                describe('hyperlink', () => {
+
+                })
+
+            })
+        })
     })
     describe('collection', function() {
         var res

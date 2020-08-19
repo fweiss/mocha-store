@@ -17,6 +17,7 @@ describe('store', function() {
     const app = require('../server/store-app.js')(dao)
     var api = request(app);
     var Order
+    var americanoId
     // create the schema once per test suit
     before(function(done) {
         mockgoose.prepareStorage()
@@ -36,11 +37,12 @@ describe('store', function() {
         mockgoose.helper.reset().then(function() {
             var orederLatte = new Order({ drink: 'americano', cost: '2.40'})
             orederLatte.save(function() {
+                americanoId = orederLatte._id
                 done()
             })
         })
     })
-    describe('order', () => {
+    describe('orders', () => {
         describe('post', () => {
             const newOrder = { order: { drink: 'mocha', cost: '4.40' } }
             var id
@@ -64,10 +66,11 @@ describe('store', function() {
                 expect(resOrder).to.have.property('links')
             })
         })
-        describe('get', () => {
+        describe('get collection', () => {
             var order
             beforeEach((done) => {
                 api.get('/orders').end(function(err, res) {
+                    expect(res.statusCode).to.equal(200)
                     expect(res.body.length).to.be(1)
                     order = res.body[0]
                     done()
@@ -78,6 +81,30 @@ describe('store', function() {
             })
             it('has cost', () => {
                 expect(order.cost).to.be('2.40')
+            })
+        })
+        // describe.skip('get entity', () => {
+        //     let res
+        //     beforeEach((done) => {
+        //         api.get('/orders/' + americanoId).end(function(err, _res) {
+        //             res = _res
+        //             expect(res.statusCode).to.equal(200)
+        //             // expect(res.body.order.length).to.be(1)
+        //             // order = res.body[0]
+        //             expect(res.body).to.have.property('order')
+        //             done()
+        //         })
+        //     })
+        //     it('works', (done) => {
+        //     })
+        // })
+        describe('foo', () => {
+            it('works', (done) => {
+                api.get('/orders/' + americanoId).then((res) => {
+                    expect(res.statusCode).to.equal(200)
+                    expect(res.body).to.have.property('order')
+                    done()
+                })
             })
         })
     })
