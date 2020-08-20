@@ -29,7 +29,7 @@ require('superagent').parse['application/atom+xml'] = function(res, fn) {
 }
 
 describe('atom feed', function() {
-    var app = require('../server/store-app')(fakeDao);
+    var app = require('../../server/store-app')(fakeDao);
     var api = request(app);
     describe('orders', () => {
         it('succeeds', function(done) {

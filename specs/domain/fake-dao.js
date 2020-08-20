@@ -9,7 +9,7 @@
 // const NotFoundError = require('../server/common-dao.js')
 // const InvalidParameterError = require('../server/common-dao.js')
 
-let { NotFoundError, InvalidParameterError} = require('../server/common-dao.js')
+let { NotFoundError, InvalidParameterError} = require('../../server/common-dao.js')
 
 module.exports = {
 

@@ -3,7 +3,7 @@ var request = require('supertest')
 const fakeDao = require('./fake-dao')
 
 describe('orders', function() {
-    var app = require('../server/store-app')(fakeDao);
+    var app = require('../../server/store-app')(fakeDao);
     var api = request(app);
     describe('entity', function() {
         describe('post', function() {

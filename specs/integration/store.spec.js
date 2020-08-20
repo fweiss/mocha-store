@@ -1,6 +1,6 @@
 var expect = require('expect.js')
 var request = require('supertest')
-const schemas = require('../server/schemas')
+const schemas = require('../../server/schemas')
 
 var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
@@ -8,13 +8,13 @@ var mongoose = new Mongoose();
 var Mockgoose = require('mockgoose').Mockgoose;
 var mockgoose = new Mockgoose(mongoose);
 
-const dao = require('../server/mongoose-dao.js')
+const dao = require('../../server/mongoose-dao.js')
 
 describe('store', function() {
     // var app = require('../server/mockgoose-test')(mongoose);
 
     // dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
-    const app = require('../server/store-app.js')(dao)
+    const app = require('../../server/store-app.js')(dao)
     var api = request(app);
     var Order
     var americanoId
