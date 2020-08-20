@@ -7,7 +7,7 @@
     "prestart": "npm update",
     "start": "node server/server.js",
     "pretest": "npm update",
-    "test": "node node_modules/mocha/bin/mocha --ui bdd --reporter spec test"
+    "test": "node node_modules/mocha/bin/mocha --ui bdd --reporter spec specs"
   },
   "author": "feweiss@gmail.com",
   "license": "MIT",
