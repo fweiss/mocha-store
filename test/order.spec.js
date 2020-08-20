@@ -267,8 +267,22 @@ describe('orders', function() {
         it('status code', () => {
             expect(res.statusCode).to.equal(200)
         })
-        it('result', () => {
-            expect (res.body.orders.length).to.equal(2)
+        describe('result', () => {
+            it('many', () => {
+                expect (res.body.orders.length).to.equal(2)
+            })
+            describe('links', () => {
+                let order
+                beforeEach(() => {
+                    order = res.body.orders[0]
+                })
+                it('present', () => {
+                    expect(order).to.have.property('links')
+                })
+                it('self', () => {
+                    expect(order.links.self.uri).to.equal('/orders/1')
+                })
+            })
         })
-    })
+     })
 })

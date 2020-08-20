@@ -16,8 +16,8 @@ module.exports = {
     getOrders: async function() {
         return {
             orders: [
-                { drink: 'latte', cost: '3.00' },
-                { drink: 'mocha', cost: '4.00' }
+                { _id: '1', drink: 'latte', cost: '3.00' },
+                { _id: '2', drink: 'mocha', cost: '4.00' }
             ]
         }
     },
