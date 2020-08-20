@@ -71,16 +71,23 @@ describe('store', function() {
             beforeEach((done) => {
                 api.get('/orders').end(function(err, res) {
                     expect(res.statusCode).to.equal(200)
-                    expect(res.body.length).to.be(1)
-                    order = res.body[0]
+                    expect(res.body.orders.length).to.be(1)
+                    order = res.body.orders[0]
                     done()
                 })
             })
-            it('has drink', () => {
-                expect(order.drink).to.eql('americano')
-            })
-            it('has cost', () => {
-                expect(order.cost).to.be('2.40')
+            describe('an order', () => {
+                it('has drink', () => {
+                    expect(order.drink).to.eql('americano')
+                })
+                it('has cost', () => {
+                    expect(order.cost).to.be('2.40')
+                })
+                describe('hyperlinks', () => {
+                    it('present', () => {
+                        expect(order).to.have.property('links')
+                    })
+                })
             })
         })
         describe('get entity', () => {

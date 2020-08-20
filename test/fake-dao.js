@@ -14,12 +14,17 @@ let { NotFoundError, InvalidParameterError} = require('../server/common-dao.js')
 module.exports = {
 
     getOrders: async function() {
-        return {
-            orders: [
+        // return {
+        //     orders: [
+        //         { _id: '1', drink: 'latte', cost: '3.00' },
+        //         { _id: '2', drink: 'mocha', cost: '4.00' }
+        //     ]
+        // }
+        return [
                 { _id: '1', drink: 'latte', cost: '3.00' },
                 { _id: '2', drink: 'mocha', cost: '4.00' }
             ]
-        }
+
     },
     addOrder: async function(order) {
         return { _id: '1234', drink: 'latte', cost: '3.00' }

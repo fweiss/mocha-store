@@ -25,7 +25,7 @@ module.exports = {
     },
 
     getOrders: async () => {
-        return await Order.find({})
+        return await Order.find({}).lean()
     },
     addOrder: async (order) => {
         order.cost = '3.33'

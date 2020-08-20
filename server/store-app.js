@@ -106,12 +106,13 @@ module.exports = function(dao) {
         let a = req.accepts('application/atom+xml')
         if (req.accepts('application/json') === 'application/json') {
             var result = await dao.getOrders()
-            _.each(result.orders, (order) => {
+            let response = { orders: result }
+            _.each(response.orders, (order) => {
                 order.links = { self: { uri: '/orders/' + order._id}}
             })
             res.set('content-type', 'application/json')
             res.status(200)
-            res.send(result)
+            res.send(response)
         } else if (req.accepts('application/atom+xml') === 'application/atom+xml') {
             res.status(200)
             res.set('content-type', 'application/atom+xml')
