@@ -41,7 +41,7 @@ describe('orders', function() {
                         done()
                     })
                 })
-                it('is successful', function() {
+                it('status 201', function() {
                     expect(res.status).to.equal(201)
                 })
                 describe('response', function() {
@@ -61,7 +61,7 @@ describe('orders', function() {
                     })
                 })
                 describe('headers', () => {
-                    it('has location', () => {
+                    it('location', () => {
                         // req.protocol + req.host
                         expect(res.get('location')).to.equal('http://' + res.request.host + '/orders/1234')
                     })

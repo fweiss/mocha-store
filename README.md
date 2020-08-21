@@ -175,6 +175,9 @@ https://semaphoreci.com/community/tutorials/a-tdd-approach-to-building-a-todo-ap
 
 https://github.com/mockgoose/Mockgoose
 
+## Stories
+- customer orders drink
+
 ## IntelliJ notes
 fix: don't use semicolom to terminate statement in new code
 
