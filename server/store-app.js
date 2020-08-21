@@ -41,7 +41,7 @@ module.exports = function(dao) {
             self: { uri: '/orders/' + result._id },
             payment: { uri: '/payment/order/' + result._id }
         }
-        res.location('/orders/' + result._id)
+        res.location(req.protocol + '://' + req.hostname + ':' + req.connection.localPort + '/orders/' + result._id)
         res.status(201)
         res.send(response)
     })

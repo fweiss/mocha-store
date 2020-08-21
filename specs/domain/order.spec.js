@@ -62,7 +62,8 @@ describe('orders', function() {
                 })
                 describe('headers', () => {
                     it('has location', () => {
-                        expect(res.get('location')).to.equal('/orders/1234')
+                        // req.protocol + req.host
+                        expect(res.get('location')).to.equal('http://' + res.request.host + '/orders/1234')
                     })
                 })
             })
