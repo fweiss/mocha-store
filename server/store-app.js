@@ -1,6 +1,3 @@
-// const NotFoundError = require('./common-dao.js')
-// const InvalidParameterError = require('./common-dao.js')
-
 let { NotFoundError, InvalidParameterError} = require('./common-dao.js')
 
 module.exports = function(dao) {
@@ -103,7 +100,6 @@ module.exports = function(dao) {
         res.send({ order:  updatedOrder })
     })
     app.get('/orders', async (req, res) => {
-        let a = req.accepts('application/atom+xml')
         if (req.accepts('application/json') === 'application/json') {
             var result = await dao.getOrders()
             let response = { orders: result }
