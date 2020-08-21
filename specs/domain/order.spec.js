@@ -60,6 +60,11 @@ describe('orders', function() {
                         expect(res.body.order.links.payment.uri).to.equal('/payment/order/1234')
                     })
                 })
+                describe('headers', () => {
+                    it('has location', () => {
+                        expect(res.get('location')).to.equal('/orders/1234')
+                    })
+                })
             })
          })
         describe('options', function() {

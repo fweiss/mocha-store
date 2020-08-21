@@ -32,16 +32,17 @@ module.exports = function(dao) {
         if (_.isUndefined(req.body.order.drink)) {
             return sendErrorStatusMessage(res, 400, 'missing drink object')
         }
+
         const result = await dao.addOrder(req.body.order)
         // todo check result.error
+
         response = { order: result }
         response.order.links =  {
             self: { uri: '/orders/' + result._id },
             payment: { uri: '/payment/order/' + result._id }
         }
-
+        res.location('/orders/' + result._id)
         res.status(201)
-        // res.send({order: { drink: 'latte', cost: '3.00', links: links } })
         res.send(response)
     })
     app.get('/orders/:orderId', async function(req, res) {
