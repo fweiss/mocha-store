@@ -113,5 +113,14 @@ describe('store', function() {
             })
          })
     })
+    describe('payment', () => {
+        it('accepts', (done) => {
+            let payment = { payment: { cardNumber: '1234', cardholderName: 'John Doe', expirationDate: '0221', amount: '4.00' } }
+            api.put('/payment/order/' + americanoId.toString()).send(payment).then((res) => {
+                expect(res.status).to.equal(201)
+                done()
+            })
+        })
+    })
  })
 

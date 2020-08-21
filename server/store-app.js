@@ -122,7 +122,7 @@ module.exports = function(dao) {
         }
     })
 
-    app.options('/payments/orders/:orderId', function(req, res) {
+    app.options('/payment/orders/:orderId', function(req, res) {
         if (req.params.orderId === '7') {
             return sendErrorStatusMessage(res, 404, 'no such order')
         }
@@ -131,7 +131,7 @@ module.exports = function(dao) {
         res.set('Allow', paymentOptions)
         res.send()
     })
-    app.put('/payments/order/:orderid', function(req, res) {
+    app.put('/payment/order/:orderid', function(req, res) {
         if (req.headers['content-length'] === '0') {
             return sendErrorStatusMessage(res, 400, 'no request body')
         }
@@ -150,7 +150,7 @@ module.exports = function(dao) {
         if (_.isUndefined(req.body.payment.amount)) {
             return sendErrorStatusMessage(res, 400, 'no amount')
         }
-        res.status(200)
+        res.status(201)
         res.send({ payment: { amount: req.body.payment.amount }})
     })
 
