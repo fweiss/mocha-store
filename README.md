@@ -20,7 +20,7 @@ Run > Edit Configurations, click "+", select Mocha. Usually this will set up thi
 
 Run > mocha-store-test, or use the toolbar. After lauch, run from the Run console at the bottom of the window.
 
-### Test plan
+## Test plan
 The tests were divided into the following intentions:
 - unit: API request interaction for each resource, collection, verb, request data validation, and response data
 - integration: data persistence integration
@@ -90,23 +90,24 @@ Common fluent test refactorings:
 * Refactor test: extract fixture (there's a bit to this: in it, remove done, comment out old code except asserts)
 
 ### Integration tests
-- integrated app and database api
-- use mockgoose to build and tear down data fixtures
-- use mongoose to verify data mutations
-- can be run in-memory (future: mongodb-memory-server)
+For integration tests, the focus is on testing:
+- the mongoose DAO code in mongoose-dao.js
+- cross-request data persistence
 
-Files:
-- store.spec.js
+Environment like production, except:
+- in-memory database test double
+- data fixtures controlled and inspectible by test code
+- synthetic HTTP requests via superagent
 
 ### Acceptance tests
-- integrate app with acceptance test database
-- persistent data
-- database can be seeded
-- access via http
-- postman scenarios
+For the acceptance tests, the focus is on testing:
+- running server
+- using external user agent (Postman)
+- a few complete user story scenarios
 
-Files:
-- server.js
+Environment like production except:
+- acceptance test database separate from production database
+- database can be cleared and seeded from cli
 
 ## Hypermedia links
 I have some questions about hypermedia links
@@ -177,6 +178,7 @@ https://github.com/mockgoose/Mockgoose
 
 ## Stories
 - customer orders drink
+- customer make payment
 
 ## IntelliJ notes
 fix: don't use semicolom to terminate statement in new code
