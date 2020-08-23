@@ -21,15 +21,56 @@ Run > Edit Configurations, click "+", select Mocha. Usually this will set up thi
 Run > mocha-store-test, or use the toolbar. After lauch, run from the Run console at the bottom of the window.
 
 ## Test plan
-The tests were divided into the following intentions:
-- unit: API request interaction for each resource, collection, verb, request data validation, and response data
+The tests were divided into the following levels:
+- domain: API request interaction for each resource, collection, verb, request data validation, and response data
 - integration: data persistence integration
-- acceptance: test for workflows
+- acceptance: test for workflow scenarios
 
-Caveats:
--- avoid complicating unit tests, stick to the simplest test of one API request/response at a time
+> The term "unit test" is intentionally avoided here.
+> It, along with "component test", suggests the low-level technique
+> of testing on a class/method basis.
+> The term "domain" testing is at a higher level which aligns with the
+> semantics of the domain model.
+> This is inspired by the structure of the spec report.
 
-### Test spec structure
+Guidelines:
+- detailed testing at the domain level
+- avoid duplicating detail tests at integration level
+- use spec report to organize testing
+
+### Domain (unit) tests
+For Domain tests, the focus is on testing:
+- app code that routes and handles requests
+- request validation
+- request error handling
+- response format and data
+- data-dependent branching
+
+Environment is like production except:
+- synthetic http request (superagent)
+- in-memory fake dao test double
+
+### Integration tests
+For integration tests, the focus is on testing:
+- the mongoose DAO code in mongoose-dao.js
+- cross-request data persistence
+
+Environment is like production, except:
+- in-memory mongoose database test double
+- data fixtures controlled and inspectible by test code
+- synthetic HTTP requests via superagent
+
+### Acceptance tests
+For the acceptance tests, the focus is on testing:
+- running server
+- using external user agent (Postman)
+- a few complete user story scenarios
+
+Environment like production except:
+- acceptance test database separate from production database
+- database can be cleared and seeded from cli
+
+## Test spec structure
 After a first false start, the following spec structure was used. The key is to use a fluent, hierarchical structure
 that fits well with REST and hypermedia links.
 
@@ -88,26 +129,6 @@ Common fluent test refactorings:
 
 * Refactor test: better fluent structure
 * Refactor test: extract fixture (there's a bit to this: in it, remove done, comment out old code except asserts)
-
-### Integration tests
-For integration tests, the focus is on testing:
-- the mongoose DAO code in mongoose-dao.js
-- cross-request data persistence
-
-Environment like production, except:
-- in-memory database test double
-- data fixtures controlled and inspectible by test code
-- synthetic HTTP requests via superagent
-
-### Acceptance tests
-For the acceptance tests, the focus is on testing:
-- running server
-- using external user agent (Postman)
-- a few complete user story scenarios
-
-Environment like production except:
-- acceptance test database separate from production database
-- database can be cleared and seeded from cli
 
 ## Hypermedia links
 I have some questions about hypermedia links
