@@ -239,7 +239,9 @@ describe('orders', function() {
                     it('has self', () => {
                         expect(res.body.order.links.self.uri).to.equal('/orders/1234')
                     })
-
+                    it('has payment', () => {
+                        expect(res.body.order.links.payment.uri).to.equal('/payment/order/1234')
+                    })
                 })
             })
             describe('completed', () => {

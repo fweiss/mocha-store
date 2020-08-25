@@ -50,7 +50,8 @@ module.exports = function(dao) {
             let result = await dao.getOrder(req.params.orderId)
             let response = { order: result }
             response.order.links = {
-                self: { uri: '/orders/' + result._id }
+                self: { uri: '/orders/' + result._id },
+                payment: { uri: '/payment/order/' + result._id }
             }
             res.status(200)
             res.send(response)
