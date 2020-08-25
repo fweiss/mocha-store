@@ -2,6 +2,7 @@ var expect = require('expect.js')
 var request = require('supertest')
 
 const dao = require('./fake-dao')
+const examples = require('../../server/example-requests.js').examples
 
 describe('payments', function() {
     const app = require('../../server/store-app')(dao);
@@ -102,7 +103,8 @@ describe('payments', function() {
             })
         })
         it('success', function(done) {
-            api.put('/payment/order/1').send({ payment: { cardNumber: '123', expirationDate: '20180201', cardholderName: 'John Doe', amount: '4.40' } }).end(function(err, res) {
+            // api.put('/payment/order/1').send({ payment: { cardNumber: '123', expirationDate: '20180201', cardholderName: 'John Doe', amount: '4.40' } }).end(function(err, res) {
+            api.put('/payment/order/1').send(examples.payment.put).end(function(err, res) {
                 expect(res.status).to.equal(201)
                 done()
             })

@@ -9,6 +9,8 @@ module.exports = function(dao) {
     var app = express();
     var _ = require('underscore');
 
+    const examples = require('./example-requests.js').examples
+
     var host = 'http://localhost:8001';
 
     var defaultOrder = {
@@ -17,11 +19,9 @@ module.exports = function(dao) {
 
     app.use(require('body-parser').json())
 
-    const paymentPutExample = { payment: { cardNumber: '123', expirationDate: '20180201', cardholderName: 'John Doe', amount: '4.40' } }
-
-    function sendErrorStatusMessage(res, status, message, example) {
+    function sendErrorStatusMessage(res, status, message) {
         res.status(status)
-        res.send({error: message, example: paymentPutExample})
+        res.send({error: message, example: examples.payment.put})
     }
 
     app.post('/orders', async function(req, res) {
