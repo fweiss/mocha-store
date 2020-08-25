@@ -39,6 +39,15 @@ describe('payments', function() {
         })
     })
     describe('put', function() {
+        describe('example body', () => {
+            it('on validation error', function(done) {
+                api.put('/payment/order/1').end(function(err, res) {
+                    expect(res.status).to.equal(400)
+                    expect(res.body).to.have.property('example')
+                    done()
+                })
+            })
+        })
         describe('error when', function() {
             it('no body', function(done) {
                 api.put('/payment/order/1').end(function(err, res) {

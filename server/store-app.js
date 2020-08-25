@@ -17,9 +17,11 @@ module.exports = function(dao) {
 
     app.use(require('body-parser').json())
 
-    function sendErrorStatusMessage(res, status, message) {
+    const paymentPutExample = { payment: { cardNumber: '123', expirationDate: '20180201', cardholderName: 'John Doe', amount: '4.40' } }
+
+    function sendErrorStatusMessage(res, status, message, example) {
         res.status(status)
-        res.send({error: message})
+        res.send({error: message, example: paymentPutExample})
     }
 
     app.post('/orders', async function(req, res) {
