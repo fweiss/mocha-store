@@ -11,21 +11,17 @@ var mockgoose = new Mockgoose(mongoose);
 const dao = require('../../server/mongoose-dao.js')
 
 describe('store', function() {
-    // var app = require('../server/mockgoose-test')(mongoose);
-
-    // dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
     const app = require('../../server/store-app.js')(dao)
     var api = request(app);
     var Order
     var americanoId
-    // create the schema once per test suit
     before(function(done) {
         mockgoose.prepareStorage()
             .then(function () {
                 dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
             })
             .then(function() {
-                // var orderScheme = new mongoose.Schema(schemas.orderSchema);
+                // get model defined in dao
                 Order = mongoose.model('Order');
             })
             .then(function() { done() })
