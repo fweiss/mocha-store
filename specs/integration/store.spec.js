@@ -14,18 +14,6 @@ describe('store', function() {
     var api = request(app);
     var Order
     var americanoId
-    // before(function(done) {
-    //     mockgoose.prepareStorage()
-    //         .then(function () {
-    //             dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
-    //         })
-    //         .then(function() {
-    //             // get model defined in dao
-    //             Order = mongoose.model('Order');
-    //         })
-    //         .then(function() { done() })
-    //         .catch(function(err) { done(err) })
-    // })
 
     before(async () => {
         mongoServer = new MongoMemoryServer()
@@ -42,8 +30,6 @@ describe('store', function() {
 
     // create a fresh documents test fixture for each test
     beforeEach(function(done) {
-        // const c = mongoose.connections
-        // mockgoose.helper.reset().then(function() {
         mongoose.connections[0].dropDatabase().then(() => {
             var orderLatte = new Order({ drink: 'americano', cost: '2.40'})
             orderLatte.save(function() {
