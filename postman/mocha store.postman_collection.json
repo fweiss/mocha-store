@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "4e561e88-4ec9-4635-b0ed-c9d729d9c37b",
+		"name": "mocha store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add drink",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"order\": { \"drink\": \"latte\" } }"
+				},
+				"url": {
+					"raw": "http://localhost:8001/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3069a38e-039d-4fea-8edd-3480de2585c9",
+						"exec": [
+							"pm.test('status code', function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"pm.test('orders array', () => {",
+							"    pm.response.to.have.jsonBody(\"orders\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
