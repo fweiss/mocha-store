@@ -6,14 +6,14 @@ var Order
 
 module.exports = {
 
-    connect: (_mongoose, uri) => {
+    connect: async (_mongoose, uri) => {
         mongoose = _mongoose
 
         // to suppress deprecation warnings
         mongoose.set('useNewUrlParser', true)
         mongoose.set('useUnifiedTopology', true)
 
-        mongoose.connect(uri)
+        await mongoose.connect(uri)
         const orderScheme = new mongoose.Schema(schemas.orderSchema)
         Order = mongoose.model('Order', orderScheme)
     },

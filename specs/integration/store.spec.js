@@ -7,6 +7,7 @@ var mongoose = new Mongoose();
 
 var Mockgoose = require('mockgoose').Mockgoose;
 var mockgoose = new Mockgoose(mongoose);
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const dao = require('../../server/mongoose-dao.js')
 
@@ -15,25 +16,40 @@ describe('store', function() {
     var api = request(app);
     var Order
     var americanoId
-    before(function(done) {
-        mockgoose.prepareStorage()
-            .then(function () {
-                dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
+    // before(function(done) {
+    //     mockgoose.prepareStorage()
+    //         .then(function () {
+    //             dao.connect(mongoose, 'mongodb://localhost:27017/TestDB')
+    //         })
+    //         .then(function() {
+    //             // get model defined in dao
+    //             Order = mongoose.model('Order');
+    //         })
+    //         .then(function() { done() })
+    //         .catch(function(err) { done(err) })
+    // })
+
+    before(async () => {
+        mongoServer = new MongoMemoryServer()
+        const mongoUri = await mongoServer.getUri()
+        await dao.connect(mongoose, mongoUri)
+            .then(async () => {
+                Order = await mongoose.model('Order')
             })
-            .then(function() {
-                // get model defined in dao
-                Order = mongoose.model('Order');
-            })
-            .then(function() { done() })
-            .catch(function(err) { done(err) })
     })
+    after(async () => {
+        await mongoose.disconnect()
+        await mongoServer.stop()
+    })
+
     // create a fresh documents test fixture for each test
     beforeEach(function(done) {
-        const c = mongoose.connections
-        mockgoose.helper.reset().then(function() {
-            var orederLatte = new Order({ drink: 'americano', cost: '2.40'})
-            orederLatte.save(function() {
-                americanoId = orederLatte._id
+        // const c = mongoose.connections
+        // mockgoose.helper.reset().then(function() {
+        mongoose.connections[0].dropDatabase().then(() => {
+            var orderLatte = new Order({ drink: 'americano', cost: '2.40'})
+            orderLatte.save(function() {
+                americanoId = orderLatte._id
                 done()
             })
         })
