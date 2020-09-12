@@ -5,8 +5,6 @@ const schemas = require('../../server/schemas')
 var Mongoose = require('mongoose').Mongoose;
 var mongoose = new Mongoose();
 
-var Mockgoose = require('mockgoose').Mockgoose;
-var mockgoose = new Mockgoose(mongoose);
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const dao = require('../../server/mongoose-dao.js')
