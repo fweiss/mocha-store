@@ -5,7 +5,5 @@ const suites = [
 ]
 
 describe('domain', () => {
-    for(let suite of suites) {
-        suite()
-    }
+    suites.forEach((suite) => { suite() })
 })

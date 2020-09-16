@@ -3,7 +3,5 @@ const suites = [
 ]
 
 describe('integration', () => {
-    for(let suite of suites) {
-        suite()
-    }
+    suites.forEach((suite) => { suite() })
 })
