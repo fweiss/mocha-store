@@ -60,14 +60,11 @@ module.exports = function(dao) {
         }
         catch (err) {
             res.status(500)
-            let z = new NotFoundError('z')
-            let y = z instanceof NotFoundError
             if (err instanceof InvalidParameterError) {
                 res.status(400)
             } else if (err instanceof NotFoundError) {
                 res.status(404)
             }
-
             res.send('order error' + err)
         }
     })
@@ -118,16 +115,6 @@ module.exports = function(dao) {
             res.send({ error: err.message })
         }
     })
-    //     dao.deleteOrder(req.params.orderId)
-    //         .then(() => {
-    //             res.status(204)
-    //             res.send()
-    //         })
-    //         .catch((err) => {
-    //             res.status(404)
-    //             res.send({ error: err.message })
-    //         })
-    // })
     app.get('/orders', async (req, res) => {
         if (req.accepts('application/json') === 'application/json') {
             var result = await dao.getOrders()
