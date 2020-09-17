@@ -41,6 +41,8 @@ module.exports = function store() {
             })
         })
         describe('orders', () => {
+            const nonexistingOrderId = '123456789012345678901234'
+
             describe('post', () => {
                 const newOrder = {order: {drink: 'mocha', cost: '4.40'}}
                 var id
@@ -91,27 +93,41 @@ module.exports = function store() {
                 })
             })
             describe('get entity', () => {
-                let res
-                beforeEach((done) => {
-                    api.get('/orders/' + americanoId).then(($res) => {
-                        res = $res
+                describe('existing', () => {
+                    let res
+                    beforeEach((done) => {
+                        api.get('/orders/' + americanoId).then(($res) => {
+                            res = $res
+                            expect(res.statusCode).to.equal(200)
+                            expect(res.body).to.have.property('order')
+                            done()
+                        })
+                    })
+                    it('status', () => {
                         expect(res.statusCode).to.equal(200)
-                        expect(res.body).to.have.property('order')
-                        done()
+                    })
+                    describe('hyperlinks', () => {
+                        it('present', () => {
+                            expect(res.body.order).to.have.property('links')
+                        })
+                        it('have order id', () => {
+                            expect(res.body.order.links.self.uri).to.contain(americanoId.toString())
+                        })
                     })
                 })
-                it('status', () => {
-                    expect(res.statusCode).to.equal(200)
-                })
-                describe('hyperlinks', () => {
-                    it('present', () => {
-                        expect(res.body.order).to.have.property('links')
+                describe('non existing', () => {
+                    let res
+                    beforeEach((done) => {
+                        api.get('/orders/' + nonexistingOrderId).then(($res) => {
+                            res = $res
+                            done()
+                        })
                     })
-                    it('have order id', () => {
-                        expect(res.body.order.links.self.uri).to.contain(americanoId.toString())
+                    it('status', () => {
+                        expect(res.statusCode).to.equal(404)
                     })
                 })
-            })
+             })
             // fixme A lot of error scenarios are being checked here and duplicated
             // in domain/order.spec. The plan was to do this in the domain suites, but
             // then there's a lot of fake-dao code. That's not only duplicate code, but code
@@ -154,7 +170,7 @@ module.exports = function store() {
                 describe('non existing', () => {
                     let res
                     before((done) => {
-                        api.delete('/orders/123456789012345678901234').then(($res) => {
+                        api.delete('/orders/' + nonexistingOrderId).then(($res) => {
                             res = $res
                             done()
                         })
