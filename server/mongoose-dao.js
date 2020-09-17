@@ -39,17 +39,13 @@ module.exports = {
         let id
         try {
             id = mongoose.Types.ObjectId(orderId)
-            await Order.deleteOne({ _id: id})
-        }
+         }
         catch(err) {
             throw new InvalidParameterError(err)
         }
-        // Order.deleteOne({ _id: id })
-        //     .then(() => {
-        //         return
-        //     })
-        //     .catch((err) => {
-        //         throw new NotFoundError('order not found')
-        //     })
+        let query = await Order.deleteOne({ _id: id})
+        if (query.deletedCount === 0) {
+            throw new NotFoundError('order not found')
+        }
     },
 }

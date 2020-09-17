@@ -110,7 +110,11 @@ module.exports = function(dao) {
             res.send()
         }
         catch(err) {
-            res.status(404)
+            if (err instanceof InvalidParameterError) {
+                res.status(400)
+            } else if (err instanceof NotFoundError) {
+                res.status(404)
+            }
             res.send({ error: err.message })
         }
     })
