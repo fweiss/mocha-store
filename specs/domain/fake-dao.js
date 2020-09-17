@@ -37,5 +37,10 @@ module.exports = {
         }
         throw new InvalidParameterError('invalid parameter')
 
+    },
+    deleteOrder: async (orderId) => {
+        if (orderId === '1') {
+            throw new NotFoundError('order not found')
+        }
     }
 }

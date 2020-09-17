@@ -268,6 +268,9 @@ module.exports = function order() {
                     it('http status', () => {
                         expect(res.statusCode).to.equal(404)
                     })
+                    it('error message', () => {
+                        expect(res.body.error).to.contain('order not found')
+                    })
                 })
                 describe('existing', () => {
                     let res;
