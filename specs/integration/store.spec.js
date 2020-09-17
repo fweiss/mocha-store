@@ -112,6 +112,49 @@ module.exports = function store() {
                     })
                 })
             })
+            describe('delete', () => {
+                // todo invalid id
+                let orderId
+                before((done) => {
+                    let order = new Order({ drink: 'latte', cost: '4.30' })
+                    order.save().then(() => {
+                        orderId = order._id
+                        done()
+                    })
+                })
+                describe('existing', () => {
+                    let res
+                    before((done) => {
+                        api.delete('/orders/' + orderId.toString()).then(($res) => {
+                            res = $res
+                            done()
+                        })
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(204)
+                    })
+                    it('removed', (done) => {
+                        Order.find({_id: orderId}).then(function (orders) {
+                            expect(orders.length).to.be(0)
+                            done()
+                        }).catch(function (err) {
+                            done(err)
+                        })
+                    })
+                })
+                describe('non existing', () => {
+                    let res
+                    before((done) => {
+                        api.delete('/orders/99').then(($res) => {
+                            res = $res
+                            done()
+                        })
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(404)
+                    })
+                })
+            })
         })
         describe('payment', () => {
             it('accepts', (done) => {
