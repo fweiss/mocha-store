@@ -103,6 +103,11 @@ module.exports = function(dao) {
         res.status(200)
         res.send({ order:  updatedOrder })
     })
+    app.delete('/orders/:orderId', (req, res) => {
+        httpStatus = req.params.orderId === '1' ? 404 : 204
+        res.status(httpStatus)
+        res.send()
+    })
     app.get('/orders', async (req, res) => {
         if (req.accepts('application/json') === 'application/json') {
             var result = await dao.getOrders()
