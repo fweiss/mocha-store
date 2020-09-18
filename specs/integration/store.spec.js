@@ -214,23 +214,7 @@ module.exports = function store() {
                         expect(res.statusCode).to.equal(404)
                     })
                 })
-                describe('invalid id', () => {
-                    let res
-                    before((done) => {
-                        api.delete('/orders/99').then(($res) => {
-                            res = $res
-                            done()
-                        })
-                    })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(400)
-                    })
-                    it('error message', () => {
-                        expect(res.body.error).to.contain('must be a single String')
-                        expect(res.body.error).to.contain('12 bytes')
-                        expect(res.body.error).to.contain('24 hex characters')
-                    })
-                })
+                describeInvalidId('delete', '/orders/99')
             })
         })
         describe('payment', () => {
