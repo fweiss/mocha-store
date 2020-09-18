@@ -8,16 +8,36 @@ var mongoose = new Mongoose();
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const dao = require('../../server/mongoose-dao.js')
+const app = require('../../server/store-app.js')(dao)
+var api = request(app);
 
+// helper function to test error responce for invalid docuement id
 function describeInvalidId(method, path) {
-
+    describe('invalid id', () => {
+        let res
+        before((done) => {
+            api[method](path).then(($res) => {
+                res = $res
+                done()
+            })
+        })
+        it('http status', () => {
+            expect(res.statusCode).to.equal(400)
+        })
+        it('error message', () => {
+            expect(res.body.error).to.contain('must be a single String')
+            expect(res.body.error).to.contain('12 bytes')
+            expect(res.body.error).to.contain('24 hex characters')
+        })
+    })
 }
+
 
 module.exports = function store() {
 
     describe('store', function () {
-        const app = require('../../server/store-app.js')(dao)
-        var api = request(app);
+        // const app = require('../../server/store-app.js')(dao)
+        // var api = request(app);
         var Order
         var americanoId
 

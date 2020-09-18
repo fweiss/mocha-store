@@ -29,7 +29,14 @@ module.exports = {
         return o.toObject()
     },
     getOrder: async (orderId) => {
-        let o = await Order.findById(mongoose.Types.ObjectId(orderId))
+        let id
+        try {
+            id = mongoose.Types.ObjectId(orderId)
+        }
+        catch (err) {
+            throw new InvalidParameterError(err)
+        }
+        let o = await Order.findById(id)
         if (o === null) {
             throw new NotFoundError('not found')
         }
@@ -40,7 +47,7 @@ module.exports = {
         try {
             id = mongoose.Types.ObjectId(orderId)
          }
-        catch(err) {
+        catch (err) {
             throw new InvalidParameterError(err)
         }
         let query = await Order.deleteOne({ _id: id})

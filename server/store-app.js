@@ -65,7 +65,8 @@ module.exports = function(dao) {
             } else if (err instanceof NotFoundError) {
                 res.status(404)
             }
-            res.send('order error' + err)
+            // res.send('order error' + err)
+            res.send({ error: err.message})
         }
     })
 
