@@ -9,6 +9,10 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const dao = require('../../server/mongoose-dao.js')
 
+function describeInvalidId(method, path) {
+
+}
+
 module.exports = function store() {
 
     describe('store', function () {
@@ -47,13 +51,17 @@ module.exports = function store() {
                 const newOrder = {order: {drink: 'mocha', cost: '4.40'}}
                 var id
                 var resOrder
+                let res
                 beforeEach((done) => {
-                    api.post('/orders').send(newOrder).end(function (err, res) {
-                        expect(res.statusCode).to.be(201)
+                    api.post('/orders').send(newOrder).end(function (err, $res) {
+                        res = $res
                         resOrder = res.body.order
                         id = res.body.order._id
                         done()
                     })
+                })
+                it('http status', () => {
+                    expect(res.statusCode).to.be(201)
                 })
                 it('confirm drink', (done) => {
                     Order.find({_id: id}, 'drink cost').then(function (orders) {
@@ -69,14 +77,20 @@ module.exports = function store() {
                 })
             })
             describe('get collection', () => {
-                var order
+                let order
+                let res
                 beforeEach((done) => {
-                    api.get('/orders').end(function (err, res) {
-                        expect(res.statusCode).to.equal(200)
-                        expect(res.body.orders.length).to.be(1)
+                    api.get('/orders').end(function (err, $res) {
+                        res = $res
                         order = res.body.orders[0]
                         done()
                     })
+                })
+                it('http status', () => {
+                    expect(res.statusCode).to.equal(200)
+                })
+                it('response data', () => {
+                    expect(res.body.orders.length).to.be(1)
                 })
                 describe('an order', () => {
                     it('has drink', () => {
@@ -103,7 +117,7 @@ module.exports = function store() {
                             done()
                         })
                     })
-                    it('status', () => {
+                    it('http status', () => {
                         expect(res.statusCode).to.equal(200)
                     })
                     describe('hyperlinks', () => {
@@ -123,10 +137,11 @@ module.exports = function store() {
                             done()
                         })
                     })
-                    it('status', () => {
+                    it('http status', () => {
                         expect(res.statusCode).to.equal(404)
                     })
                 })
+                describeInvalidId('get', '/orders/' + '99')
              })
             // fixme A lot of error scenarios are being checked here and duplicated
             // in domain/order.spec. The plan was to do this in the domain suites, but
