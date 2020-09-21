@@ -19,9 +19,13 @@ module.exports = function(dao) {
 
     app.use(require('body-parser').json())
 
-    function sendErrorStatusMessage(res, status, message) {
+    function sendErrorStatusMessage(res, status, message, $examples) {
         res.status(status)
-        res.send({error: message, example: examples.payment.put})
+        let response = { error: message }
+        if ($examples) {
+            response.examples = $examples
+        }
+        res.send(response)
     }
 
     app.post('/orders', async function(req, res) {
@@ -80,16 +84,17 @@ module.exports = function(dao) {
         res.send()
     })
     app.put('/orders/:orderId', function(req, res) {
+        const $examples = examples.orders.put
         if (req.headers['content-length'] === '0') {
-            return sendErrorStatusMessage(res, 400, 'empty request body')
+            return sendErrorStatusMessage(res, 400, 'empty request body', $examples)
         }
         if (_.isUndefined(req.body.order)) {
-            return sendErrorStatusMessage(res, 400, 'missing order object')
+            return sendErrorStatusMessage(res, 400, 'missing order object', $examples)
         }
         const validKeys = [ 'additions', 'status' ]
         if (_.isEmpty(_.intersection(_.keys(req.body.order), validKeys))) {
         // if (_.isUndefined(req.body.order.additions)) {
-            return sendErrorStatusMessage(res, 400, 'invalid update')
+            return sendErrorStatusMessage(res, 400, 'invalid update', $examples)
         }
         if (req.params.orderId === '2') {
             return sendErrorStatusMessage(res, 409, 'order already completed')
@@ -148,23 +153,24 @@ module.exports = function(dao) {
         res.send()
     })
     app.put('/payment/order/:orderid', function(req, res) {
+        const ex = examples.payment.put
         if (req.headers['content-length'] === '0') {
-            return sendErrorStatusMessage(res, 400, 'no request body')
+            return sendErrorStatusMessage(res, 400, 'no request body', ex)
         }
         if (_.isUndefined(req.body.payment)) {
-            return sendErrorStatusMessage(res, 400, 'no payment object')
+            return sendErrorStatusMessage(res, 400, 'no payment object', ex)
         }
         if (_.isUndefined(req.body.payment.cardNumber)) {
-            return sendErrorStatusMessage(res, 400, 'no card number')
+            return sendErrorStatusMessage(res, 400, 'no card number', ex)
         }
         if (_.isUndefined(req.body.payment.expirationDate)) {
-            return sendErrorStatusMessage(res, 400, 'no expiration date')
+            return sendErrorStatusMessage(res, 400, 'no expiration date', ex)
         }
         if (_.isUndefined(req.body.payment.cardholderName)) {
-            return sendErrorStatusMessage(res, 400, 'no cardholder name')
+            return sendErrorStatusMessage(res, 400, 'no cardholder name', ex)
         }
         if (_.isUndefined(req.body.payment.amount)) {
-            return sendErrorStatusMessage(res, 400, 'no amount')
+            return sendErrorStatusMessage(res, 400, 'no amount', ex)
         }
         res.status(201)
         res.send({ payment: { amount: req.body.payment.amount }})

@@ -125,6 +125,8 @@ module.exports = function order() {
                         api.put('/orders/1').send({order: {foobar: 'toast'}}).end(function (err, res) {
                             expect(res.status).to.equal(400);
                             expect(res.body.error).to.contain('invalid update');
+                            // expect(res.body.examples).to.deep.equal({order:{additions:'shot'}})
+                            expect(res.body.examples.order).to.have.property('additions')
                             done();
                         });
                     })

@@ -96,6 +96,19 @@ module.exports = function store() {
                     expect(resOrder).to.have.property('links')
                 })
             })
+            describe('put', () => {
+                let res
+                let update = { order: { additions: 'low' } }
+                before((done) => {
+                    api.put('/orders/' + americanoId).send(update).then(($res) => {
+                        res = $res
+                        done()
+                    })
+                })
+                it('http status', () => {
+                    expect(res.statusCode).to.equal(200)
+                })
+            })
             describe('get collection', () => {
                 let order
                 let res
