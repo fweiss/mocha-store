@@ -104,7 +104,7 @@ module.exports = function order() {
                     })
                 })
             })
-            describe('put', function () {
+            describe.skip('put', function () {
                 // although the guide indicated optionally doing a "trial" put with Expect: 100-Continue, we'll defer that
                 describe('error when', function () {
                     it('no body', function (done) {
@@ -132,9 +132,9 @@ module.exports = function order() {
                     })
                 })
                 describe('additions shot', function () {
+                    const partialOrder = {order: {additions: 'tor'}};
                     describe('error when', function () {
                         it('order already completed', function (done) {
-                            var partialOrder = {order: {additions: 'tor'}};
                             api.put('/orders/2').send(partialOrder).end(function (err, res) {
                                 expect(res.status).to.equal(409);
                                 expect(res.body.error).to.contain('order already completed');

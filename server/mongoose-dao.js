@@ -4,6 +4,15 @@ const schemas = require('../server/schemas')
 
 var Order
 
+function getIdObject(id) {
+    try {
+        return mongoose.Types.ObjectId(id)
+    }
+    catch (err) {
+        throw new InvalidParameterError(err)
+    }
+}
+
 module.exports = {
 
     connect: async (_mongoose, uri) => {
@@ -41,6 +50,12 @@ module.exports = {
             throw new NotFoundError('not found')
         }
         return o.toObject()
+    },
+    updateOrder: async (orderId, updateOrder) => {
+        const id = getIdObject(orderId)
+        const query = await Order.updateOne({ _id: id }, updateOrder)
+        // todo check query.nModifiedß, ok, n
+        return
     },
     deleteOrder: async (orderId) => {
         let id

@@ -12,11 +12,11 @@ const app = require('../../server/store-app.js')(dao)
 var api = request(app);
 
 // helper function to test error responce for invalid docuement id
-function describeInvalidId(method, path) {
+function describeInvalidId(method, path, content) {
     describe('invalid id', () => {
         let res
         before((done) => {
-            api[method](path).then(($res) => {
+            api[method](path).send(content).then(($res) => {
                 res = $res
                 done()
             })
@@ -99,16 +99,50 @@ module.exports = function store() {
             describe('put', () => {
                 let res
                 let update = { order: { additions: 'low' } }
+                let ids = {
+                    latte: null
+                }
                 before((done) => {
-                    api.put('/orders/' + americanoId).send(update).then(($res) => {
-                        res = $res
-                        done()
+                    Order.insertMany([
+                        { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                    ])
+                        .then((docs) => {
+                            ids.latte = docs[0]._doc._id
+                            done()
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+                describe('error when', () => {
+
+                })
+                describe('success', () => {
+                    before((done) => {
+                        api.put('/orders/' + ids.latte.toString()).send(update).then(($res) => {
+                            res = $res
+                            done()
+                        })
                     })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(200)
+                    })
+                    // describe('updates', () => {
+                    //     let order
+                    //     before(async (done) => {
+                    //         Order.find({ _id : ids.latte }, 'drink cost')
+                    //             .then(($orders) => {
+                    //                 order = $orders[0]
+                    //             })
+                    //         done()
+                    //     })
+                    //     it('has addition', () => {
+                    //         expect(order.additions).to.equal('low')
+                    //     })
+                    // })
                 })
-                it('http status', () => {
-                    expect(res.statusCode).to.equal(200)
-                })
-            })
+                // describeInvalidId('put', '/orders/' + '99', update)
+             })
             describe('get collection', () => {
                 let order
                 let res

@@ -36,11 +36,16 @@ module.exports = {
             throw new NotFoundError('not found')
         }
         throw new InvalidParameterError('invalid parameter')
-
     },
     deleteOrder: async (orderId) => {
         if (orderId === '1') {
             throw new NotFoundError('order not found')
         }
-    }
+    },
+    updateOrder: async (orderId, updatedOrder) => {
+        if (orderId === 2) {
+            throw new InvalidStateError('order have already been completed')
+        }
+        return { order: { drink: 'latte', additions: 'tor' }}
+    },
 }

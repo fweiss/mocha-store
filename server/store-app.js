@@ -1,4 +1,4 @@
-let { NotFoundError, InvalidParameterError} = require('./common-dao.js')
+let { NotFoundError, InvalidParameterError, InvalidStateError } = require('./common-dao.js')
 
 module.exports = function(dao) {
 
@@ -83,7 +83,7 @@ module.exports = function(dao) {
         res.set('Allow', orderOptions)
         res.send()
     })
-    app.put('/orders/:orderId', function(req, res) {
+    app.put('/orders/:orderId', async function(req, res) {
         const $examples = examples.orders.put
         if (req.headers['content-length'] === '0') {
             return sendErrorStatusMessage(res, 400, 'empty request body', $examples)
@@ -96,15 +96,28 @@ module.exports = function(dao) {
         // if (_.isUndefined(req.body.order.additions)) {
             return sendErrorStatusMessage(res, 400, 'invalid update', $examples)
         }
-        if (req.params.orderId === '2') {
-            return sendErrorStatusMessage(res, 409, 'order already completed')
+        // if (req.params.orderId === '2') {
+        //     return sendErrorStatusMessage(res, 409, 'order already completed')
+        // }
+        // if (req.body.order.status && req.body.order.status !== 'preparing') {
+        //     return sendErrorStatusMessage(res, 400, 'invalid order status')
+        // }
+        // var updatedOrder = _.extend({ price: '4.00' }, defaultOrder, req.body.order)
+        try {
+            const result = await dao.updateOrder(req.params.orderId, req.body.order)
+            res.status(200)
+            res.send(result)
         }
-        if (req.body.order.status && req.body.order.status !== 'preparing') {
-            return sendErrorStatusMessage(res, 400, 'invalid order status')
+        catch (err) {
+            res.status(500)
+            if (err instanceof InvalidStateError) {
+                res.status(409)
+            }
+            if (err instanceof InvalidParameterError) {
+                res.status(400)
+            }
+            res.send({error: err.message})
         }
-        var updatedOrder = _.extend({ price: '4.00' }, defaultOrder, req.body.order)
-        res.status(200)
-        res.send({ order:  updatedOrder })
     })
     app.delete('/orders/:orderId', async (req, res) => {
         try {
