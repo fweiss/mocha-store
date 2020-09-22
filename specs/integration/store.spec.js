@@ -32,13 +32,27 @@ function describeInvalidId(method, path, content) {
     })
 }
 
+let Order
+
+async function dataFixture(models) {
+    return mongoose.connections[0].dropDatabase()
+        .then(() => {
+            return Order.insertMany(models)
+        })
+        .then((docs) => {
+            let ids = {}
+            for (let model of docs) {
+                ids[model._doc.drink] = model._doc._id
+            }
+            return ids
+        })
+}
 
 module.exports = function store() {
 
     describe('store', function () {
         // const app = require('../../server/store-app.js')(dao)
         // var api = request(app);
-        var Order
         var americanoId
 
         before(async () => {
@@ -55,15 +69,15 @@ module.exports = function store() {
         })
 
         // create a fresh documents test fixture for each test
-        beforeEach(function (done) {
-            mongoose.connections[0].dropDatabase().then(() => {
-                var orderLatte = new Order({drink: 'americano', cost: '2.40'})
-                orderLatte.save(function () {
-                    americanoId = orderLatte._id
-                    done()
-                })
-            })
-        })
+        // beforeEach(function (done) {
+        //     mongoose.connections[0].dropDatabase().then(() => {
+        //         var orderLatte = new Order({drink: 'americano', cost: '2.40'})
+        //         orderLatte.save(function () {
+        //             americanoId = orderLatte._id
+        //             done()
+        //         })
+        //     })
+        // })
         describe('orders', () => {
             const nonexistingOrderId = '123456789012345678901234'
 
@@ -102,17 +116,25 @@ module.exports = function store() {
                 let ids = {
                     latte: null
                 }
-                before((done) => {
-                    Order.insertMany([
+                // before((done) => {
+                //     mongoose.connections[0].dropDatabase()
+                //         .then(() => {
+                //             return Order.insertMany([
+                //                 { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                //             ])
+                //         })
+                //          .then((docs) => {
+                //             ids.latte = docs[0]._doc._id
+                //             done()
+                //         })
+                //         .catch((err) => {
+                //             console.log(err)
+                //         })
+                // })
+                before( async () => {
+                    ids = await dataFixture([
                         { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
                     ])
-                        .then((docs) => {
-                            ids.latte = docs[0]._doc._id
-                            done()
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
                 })
                 describe('error when', () => {
 
@@ -127,25 +149,42 @@ module.exports = function store() {
                     it('http status', () => {
                         expect(res.statusCode).to.equal(200)
                     })
-                    // describe('updates', () => {
-                    //     let order
-                    //     before(async (done) => {
-                    //         Order.find({ _id : ids.latte }, 'drink cost')
-                    //             .then(($orders) => {
-                    //                 order = $orders[0]
-                    //             })
-                    //         done()
-                    //     })
-                    //     it('has addition', () => {
-                    //         expect(order.additions).to.equal('low')
-                    //     })
-                    // })
+                    describe('updates', () => {
+                        let order
+                        before( (done) => {
+                            // let query = await Order.findById(ids.latte)
+                            // done()
+                            Order.findById(ids.latte, (error, $order) => {
+                                order = $order
+                                done()
+                            })
+                        })
+                        it('has addition', () => {
+                            expect(order.additions).to.equal('low')
+                        })
+                    })
                 })
                 // describeInvalidId('put', '/orders/' + '99', update)
              })
             describe('get collection', () => {
                 let order
                 let res
+                let ids = {}
+                before((done) => {
+                    mongoose.connections[0].dropDatabase()
+                        .then(() => {
+                            return Order.insertMany([
+                                { drink: 'americano', cost: '2.40', additions: '', status: 'PENDING' },
+                            ])
+                        })
+                        .then((docs) => {
+                            ids.latte = docs[0]._doc._id
+                            done()
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
                 beforeEach((done) => {
                     api.get('/orders').end(function (err, $res) {
                         res = $res
@@ -176,8 +215,31 @@ module.exports = function store() {
             describe('get entity', () => {
                 describe('existing', () => {
                     let res
+                    let ids = {}
+                    // before((done) => {
+                    //     dataFixture(ids, [
+                    //         { drink: 'americano', cost: '2.40' },
+                    //     ]).then(() => {
+                    //         done()
+                    //     })
+                    // })
+                    before((done) => {
+                        mongoose.connections[0].dropDatabase()
+                            .then(() => {
+                                return Order.insertMany([
+                                    { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                                ])
+                            })
+                            .then((docs) => {
+                                ids.latte = docs[0]._doc._id
+                                done()
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
                     beforeEach((done) => {
-                        api.get('/orders/' + americanoId).then(($res) => {
+                        api.get('/orders/' + ids.latte.toString()).then(($res) => {
                             res = $res
                             expect(res.statusCode).to.equal(200)
                             expect(res.body).to.have.property('order')
@@ -192,7 +254,7 @@ module.exports = function store() {
                             expect(res.body.order).to.have.property('links')
                         })
                         it('have order id', () => {
-                            expect(res.body.order.links.self.uri).to.contain(americanoId.toString())
+                            expect(res.body.order.links.self.uri).to.contain(ids.latte.toString())
                         })
                     })
                 })
@@ -274,7 +336,7 @@ module.exports = function store() {
                         amount: '4.00'
                     }
                 }
-                api.put('/payment/order/' + americanoId.toString()).send(payment).then((res) => {
+                api.put('/payment/order/' + '22').send(payment).then((res) => {
                     expect(res.status).to.equal(201)
                     done()
                 })
