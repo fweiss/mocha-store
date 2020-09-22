@@ -34,6 +34,8 @@ function describeInvalidId(method, path, content) {
 
 let Order
 
+// helper to initialize db with the given order models
+// and return the respective document ids
 async function dataFixture(models) {
     return mongoose.connections[0].dropDatabase()
         .then(() => {
@@ -68,16 +70,6 @@ module.exports = function store() {
             await mongoServer.stop()
         })
 
-        // create a fresh documents test fixture for each test
-        // beforeEach(function (done) {
-        //     mongoose.connections[0].dropDatabase().then(() => {
-        //         var orderLatte = new Order({drink: 'americano', cost: '2.40'})
-        //         orderLatte.save(function () {
-        //             americanoId = orderLatte._id
-        //             done()
-        //         })
-        //     })
-        // })
         describe('orders', () => {
             const nonexistingOrderId = '123456789012345678901234'
 
@@ -116,21 +108,6 @@ module.exports = function store() {
                 let ids = {
                     latte: null
                 }
-                // before((done) => {
-                //     mongoose.connections[0].dropDatabase()
-                //         .then(() => {
-                //             return Order.insertMany([
-                //                 { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
-                //             ])
-                //         })
-                //          .then((docs) => {
-                //             ids.latte = docs[0]._doc._id
-                //             done()
-                //         })
-                //         .catch((err) => {
-                //             console.log(err)
-                //         })
-                // })
                 before( async () => {
                     ids = await dataFixture([
                         { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
@@ -170,20 +147,10 @@ module.exports = function store() {
                 let order
                 let res
                 let ids = {}
-                before((done) => {
-                    mongoose.connections[0].dropDatabase()
-                        .then(() => {
-                            return Order.insertMany([
-                                { drink: 'americano', cost: '2.40', additions: '', status: 'PENDING' },
-                            ])
-                        })
-                        .then((docs) => {
-                            ids.latte = docs[0]._doc._id
-                            done()
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                before(async () => {
+                    ids = await dataFixture([
+                        { drink: 'americano', cost: '2.40', additions: '', status: 'PENDING' },
+                    ])
                 })
                 beforeEach((done) => {
                     api.get('/orders').end(function (err, $res) {
@@ -216,27 +183,10 @@ module.exports = function store() {
                 describe('existing', () => {
                     let res
                     let ids = {}
-                    // before((done) => {
-                    //     dataFixture(ids, [
-                    //         { drink: 'americano', cost: '2.40' },
-                    //     ]).then(() => {
-                    //         done()
-                    //     })
-                    // })
-                    before((done) => {
-                        mongoose.connections[0].dropDatabase()
-                            .then(() => {
-                                return Order.insertMany([
-                                    { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
-                                ])
-                            })
-                            .then((docs) => {
-                                ids.latte = docs[0]._doc._id
-                                done()
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
+                    before(async() => {
+                        ids = await dataFixture([
+                            { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                        ])
                     })
                     beforeEach((done) => {
                         api.get('/orders/' + ids.latte.toString()).then(($res) => {
@@ -284,12 +234,11 @@ module.exports = function store() {
             // So now we have to wonder what the domain suites should be testing.
             describe('delete', () => {
                 let orderId
-                before((done) => {
-                    let order = new Order({ drink: 'latte', cost: '4.30' })
-                    order.save().then(() => {
-                        orderId = order._id
-                        done()
-                    })
+                before(async () => {
+                    ids = await dataFixture([
+                        { drink: 'latte', cost: '4.30' }
+                    ])
+                    orderId = ids.latte
                 })
                 describe('existing', () => {
                     let res
