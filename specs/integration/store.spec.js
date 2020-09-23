@@ -119,100 +119,101 @@ module.exports = function store() {
                     expect(resOrder).to.have.property('links')
                 })
             })
-            describe('put additions', () => {
-                let res
-                let ids = { }
-                before( async () => {
-                    ids = await dataFixture([
-                        { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
-                        { drink: 'mocha', cost: '4.30', additions: 'nut', status: 'PENDING' },
-                        { drink: 'americano', cost: '2.30', additions: '', status: 'COMPLETED' },
-                    ])
-                })
-                describe('error when', () => {
-
-                })
-                describe('pending with no additions', () => {
-                    let update = { order: { additions: 'low' } }
-                    before((done) => {
-                        api.put('/orders/' + ids.latte.toString()).send(update).then(($res) => {
-                            res = $res
-                            done()
-                        })
+            describe('put', () => {
+                describe('additions', () => {
+                    let res
+                    let ids = { }
+                    before( async () => {
+                        ids = await dataFixture([
+                            { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                            { drink: 'mocha', cost: '4.30', additions: 'nut', status: 'PENDING' },
+                            { drink: 'americano', cost: '2.30', additions: '', status: 'COMPLETED' },
+                        ])
                     })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(200)
-                    })
-                    describe('update', () => {
-                        let order
-                        before( (done) => {
-                            // let query = await Order.findById(ids.latte)
-                            // done()
-                            Order.findById(ids.latte, (error, $order) => {
-                                order = $order
-                                done()
+                    describe('pending', () => {
+                        describe('with no additions', () => {
+                            let update = { order: { additions: 'low' } }
+                            before((done) => {
+                                api.put('/orders/' + ids.latte.toString()).send(update).then(($res) => {
+                                    res = $res
+                                    done()
+                                })
+                            })
+                            it('http status', () => {
+                                expect(res.statusCode).to.equal(200)
+                            })
+                            describe('update', () => {
+                                let order
+                                before( (done) => {
+                                    // let query = await Order.findById(ids.latte)
+                                    // done()
+                                    Order.findById(ids.latte, (error, $order) => {
+                                        order = $order
+                                        done()
+                                    })
+                                })
+                                it('has addition', () => {
+                                    expect(order.additions).to.equal('low')
+                                })
                             })
                         })
-                        it('has addition', () => {
-                            expect(order.additions).to.equal('low')
+                        describe('with more additions', () => {
+                            let id
+                            let res
+                            let additions = { order: { additions: 'low tir cin' } }
+                            before(() => {
+                                id = ids.mocha
+                            })
+                            before(async () => {
+                                res = await api.put('/orders/' + id.toString()).send(additions)
+                            })
+                            it('http status', () => {
+                                expect(res.statusCode).to.equal(200)
+                            })
+                            describe('update', () => {
+                                let query
+                                before(async () => {
+                                    query = await Order.findById(id)
+                                })
+                                it('has more additions', () => {
+                                    expect(query._doc.additions).to.equal('low tir cin')
+                                })
+                            })
                         })
                     })
-                })
-                describe('pending with more additions', () => {
-                    let id
-                    let res
-                    let additions = { order: { additions: 'low tir cin' } }
-                    before(() => {
-                        id = ids.mocha
-                    })
-                    before(async () => {
-                        res = await api.put('/orders/' + id.toString()).send(additions)
-                    })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(200)
-                    })
-                    describe('update', () => {
-                        let query
+                     describe('completed', () => {
+                        let addition = { order: { additions: 'tor' }}
+                        let id
+                        let res
+                        before(() => { id = ids.americano })
                         before(async () => {
-                            query = await Order.findById(id)
+                            res = await api.put('/orders/' + id.toString()).send(addition)
                         })
-                        it('has more additions', () => {
-                            expect(query._doc.additions).to.equal('low tir cin')
+                        it('http status', () => {
+                            expect(res.statusCode).to.equal(409)
+                        })
+                        it('error message', () => {
+                            // expect(res.body.error).to.contain('illegal state')
+                            expect(res.body.error).to.contain('order is completed')
                         })
                     })
+                    describe('non existing', () => {
+                        let id = '123456789012345678901234'
+                        let additions = { order: { additions: 'tor' } }
+                        let res
+                        before(async () => {
+                            res = await api.put('/orders/' + id).send(additions)
+                        })
+                        it('http status', () => {
+                            expect(res.statusCode).to.equal(404)
+                        })
+                    })
+                    describe('invalid id', () => {
+                        specInvalidId('put', '/orders/99', { order: { additions: 'tor' } })
+                    })
+                    // describeInvalidId('put', '/orders/' + '99', 'put')
                 })
-                describe('completed', () => {
-                    let addition = { order: { additions: 'tor' }}
-                    let id
-                    let res
-                    before(() => { id = ids.americano })
-                    before(async () => {
-                        res = await api.put('/orders/' + id.toString()).send(addition)
-                    })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(409)
-                    })
-                    it('error message', () => {
-                        // expect(res.body.error).to.contain('illegal state')
-                        expect(res.body.error).to.contain('order is completed')
-                    })
-                })
-                describe('non existing', () => {
-                    let id = '123456789012345678901234'
-                    let additions = { order: { additions: 'tor' } }
-                    let res
-                    before(async () => {
-                        res = await api.put('/orders/' + id).send(additions)
-                    })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(404)
-                    })
-                })
-                describe('invalid id', () => {
-                    specInvalidId('put', '/orders/99', { order: { additions: 'tor' } })
-                })
-                // describeInvalidId('put', '/orders/' + '99', 'put')
-             })
+            })
             describe('get collection', () => {
                 let order
                 let res
