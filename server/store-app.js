@@ -96,13 +96,6 @@ module.exports = function(dao) {
         // if (_.isUndefined(req.body.order.additions)) {
             return sendErrorStatusMessage(res, 400, 'invalid update', $examples)
         }
-        // if (req.params.orderId === '2') {
-        //     return sendErrorStatusMessage(res, 409, 'order already completed')
-        // }
-        // if (req.body.order.status && req.body.order.status !== 'preparing') {
-        //     return sendErrorStatusMessage(res, 400, 'invalid order status')
-        // }
-        // var updatedOrder = _.extend({ price: '4.00' }, defaultOrder, req.body.order)
 
         try {
             const result = await dao.updateOrder(req.params.orderId, req.body.order)
@@ -192,7 +185,6 @@ module.exports = function(dao) {
         res.status(201)
         res.send({ payment: { amount: req.body.payment.amount }})
     })
-
 
     return app;
 };
