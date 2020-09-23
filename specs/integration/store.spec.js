@@ -104,19 +104,19 @@ module.exports = function store() {
             })
             describe('put', () => {
                 let res
-                let update = { order: { additions: 'low' } }
-                let ids = {
-                    latte: null
-                }
+                let ids = { }
                 before( async () => {
                     ids = await dataFixture([
                         { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                        { drink: 'mocha', cost: '4.30', additions: 'nut', status: 'PENDING' },
+                        { drink: 'americano', cost: '2.30', additions: '', status: 'COMPLETED' },
                     ])
                 })
                 describe('error when', () => {
 
                 })
-                describe('success', () => {
+                describe('pending no additions', () => {
+                    let update = { order: { additions: 'low' } }
                     before((done) => {
                         api.put('/orders/' + ids.latte.toString()).send(update).then(($res) => {
                             res = $res
@@ -126,7 +126,7 @@ module.exports = function store() {
                     it('http status', () => {
                         expect(res.statusCode).to.equal(200)
                     })
-                    describe('updates', () => {
+                    describe('update', () => {
                         let order
                         before( (done) => {
                             // let query = await Order.findById(ids.latte)
@@ -138,6 +138,29 @@ module.exports = function store() {
                         })
                         it('has addition', () => {
                             expect(order.additions).to.equal('low')
+                        })
+                    })
+                })
+                describe('pending more additions', () => {
+                    let id
+                    let res
+                    let additions = { order: { additions: 'low tir' } }
+                    before(() => {
+                        id = ids.mocha
+                    })
+                    before(async () => {
+                        res = await api.put('/orders/' + id.toString()).send(additions)
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(200)
+                    })
+                    describe('update', () => {
+                        let query
+                        before(async () => {
+                            query = await Order.findById(id)
+                        })
+                        it('has more additions', () => {
+                            expect(query._doc.additions).to.equal('low tir')
                         })
                     })
                 })
