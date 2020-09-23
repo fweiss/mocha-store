@@ -4,7 +4,7 @@ const schemas = require('../server/schemas')
 
 var Order
 
-function getIdObject(id) {
+function getObjectId(id) {
     try {
         return mongoose.Types.ObjectId(id)
     }
@@ -38,13 +38,8 @@ module.exports = {
         return o.toObject()
     },
     getOrder: async (orderId) => {
-        let id
-        try {
-            id = mongoose.Types.ObjectId(orderId)
-        }
-        catch (err) {
-            throw new InvalidParameterError(err)
-        }
+        let id = getObjectId(orderId)
+
         let o = await Order.findById(id)
         if (o === null) {
             throw new NotFoundError('not found')
@@ -52,27 +47,22 @@ module.exports = {
         return o.toObject()
     },
     updateOrder: async (orderId, updateOrder) => {
-        const id = getIdObject(orderId)
+        const id = getObjectId(orderId)
 
-        const query1 = await Order.findById(id)
-        if (query1 === null) {
+        const statusQuery = await Order.findById(id)
+        if (statusQuery === null) {
             throw new NotFoundError('order not found')
         }
-        if (query1._doc.status === 'COMPLETED') {
+        if (statusQuery._doc.status === 'COMPLETED') {
             throw new InvalidStateError('order is completed')
         }
-        const query = await Order.updateOne({ _id: id }, updateOrder)
+        const updateQuery = await Order.updateOne({ _id: id }, updateOrder)
         // todo check query.nModifiedß, ok, n
         return
     },
     deleteOrder: async (orderId) => {
-        let id
-        try {
-            id = mongoose.Types.ObjectId(orderId)
-         }
-        catch (err) {
-            throw new InvalidParameterError(err)
-        }
+        const id = getObjectId(orderId)
+
         let query = await Order.deleteOne({ _id: id})
         if (query.deletedCount === 0) {
             throw new NotFoundError('order not found')
