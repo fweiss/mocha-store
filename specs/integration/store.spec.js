@@ -15,11 +15,8 @@ var api = request(app);
 function describeInvalidId(method, path, content) {
     describe('invalid id', () => {
         let res
-        before((done) => {
-            api[method](path).send(content).then(($res) => {
-                res = $res
-                done()
-            })
+        before(async () => {
+            res = await api[method](path).send(content)
         })
         it('http status', () => {
             expect(res.statusCode).to.equal(400)
@@ -32,21 +29,18 @@ function describeInvalidId(method, path, content) {
     })
 }
 function specInvalidId(method, path, content) {
-        let res
-        before((done) => {
-            api[method](path).send(content).then(($res) => {
-                res = $res
-                done()
-            })
-        })
-        it('http status', () => {
-            expect(res.statusCode).to.equal(400)
-        })
-        it('error message', () => {
-            expect(res.body.error).to.contain('must be a single String')
-            expect(res.body.error).to.contain('12 bytes')
-            expect(res.body.error).to.contain('24 hex characters')
-        })
+    let res
+    before(async () => {
+        res = await api[method](path).send(content)
+    })
+    it('http status', () => {
+        expect(res.statusCode).to.equal(400)
+    })
+    it('error message', () => {
+        expect(res.body.error).to.contain('must be a single String')
+        expect(res.body.error).to.contain('12 bytes')
+        expect(res.body.error).to.contain('24 hex characters')
+    })
 }
 
 let Order
@@ -133,11 +127,8 @@ module.exports = function store() {
                     describe('pending', () => {
                         describe('with no additions', () => {
                             let update = { order: { additions: 'low' } }
-                            before((done) => {
-                                api.put('/orders/' + ids.latte.toString()).send(update).then(($res) => {
-                                    res = $res
-                                    done()
-                                })
+                            before(async () => {
+                                res = await api.put('/orders/' + ids.latte.toString()).send(update)
                             })
                             it('http status', () => {
                                 expect(res.statusCode).to.equal(200)
@@ -281,11 +272,8 @@ module.exports = function store() {
                 })
                 describe('non existing', () => {
                     let res
-                    beforeEach((done) => {
-                        api.get('/orders/' + nonexistingOrderId).then(($res) => {
-                            res = $res
-                            done()
-                        })
+                    before(async () => {
+                        res = await api.get('/orders/' + nonexistingOrderId)
                     })
                     it('http status', () => {
                         expect(res.statusCode).to.equal(404)
@@ -313,11 +301,8 @@ module.exports = function store() {
                 })
                 describe('existing', () => {
                     let res
-                    before((done) => {
-                        api.delete('/orders/' + orderId.toString()).then(($res) => {
-                            res = $res
-                            done()
-                        })
+                    before(async () => {
+                        res = await api.delete('/orders/' + orderId.toString())
                     })
                     it('http status', () => {
                         expect(res.statusCode).to.equal(204)
@@ -333,11 +318,8 @@ module.exports = function store() {
                 })
                 describe('non existing', () => {
                     let res
-                    before((done) => {
-                        api.delete('/orders/' + nonexistingOrderId).then(($res) => {
-                            res = $res
-                            done()
-                        })
+                    before(async () => {
+                        res = await api.delete('/orders/' + nonexistingOrderId)
                     })
                     it('http status', () => {
                         expect(res.statusCode).to.equal(404)
