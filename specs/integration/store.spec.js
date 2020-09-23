@@ -280,17 +280,10 @@ module.exports = function store() {
                     })
                 })
                 describeInvalidId('get', '/orders/' + '99')
-             })
-            // fixme A lot of error scenarios are being checked here and duplicated
-            // in domain/order.spec. The plan was to do this in the domain suites, but
-            // then there's a lot of fake-dao code. That's not only duplicate code, but code
-            // that may give false negatives, that is, pass in domain, but not in integration
-            // or acceptance.
-            // The issue appears to be that there's
-            // more logic in the mongoos-da than originally expected. For example, the deleteOrder
-            // method i the dao is now responsible for both checking for valid id encapsulation
-            // and checking the query for zero deleted documents.
-            // So now we have to wonder what the domain suites should be testing.
+            })
+
+            // DELETE
+
             describe('delete', () => {
                 let orderId
                 before(async () => {

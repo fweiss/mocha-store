@@ -38,6 +38,31 @@ Guidelines:
 - avoid duplicating detail tests at integration level
 - use spec report to organize testing
 
+> After developing the specs some more, it looks like some modifications to 
+> the test plan are needed.
+> A lot of error scenarios are being checked in the integration suite and 
+> duplicated in domain/order.spec. 
+> The plan was to do detailed error specs in the domain suites, but
+> then there's a lot of fake-dao code. 
+> That's not only duplicate code, but code that may give false positives, 
+> that is, pass in domain, but not in integration or acceptance.
+> The issue appears to be that there's more logic in the mongoos-dao than 
+> originally expected and a tighter coupling between the service and dao
+> layers with respect to exception handling.
+> Clearly the service layer is responsible for turning dao execptions into
+> HTTP status code and responses.
+> These exceptions may be better to exercise with a fake, but then it
+> comes bake to having a faithful fake that doesn't produce false positives.
+> For example, the deleteOrder method in the dao is now responsible for 
+> both checking for valid id encapsulation and checking the query for 
+> zero deleted documents.
+> Another example is in updateOrder, which needs to check the order status
+> before the actual update.
+> So now we have to wonder what the domain suites should be testing.
+> Testing the dao layer has also be considered, but that seems to also
+> introduce duplicates/overlap/sync problems as the integration
+> between the service and dao layers is the principle focus of testing.
+
 ### Domain (unit) tests
 For Domain tests, the focus is on testing:
 - app code that routes and handles requests
