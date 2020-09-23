@@ -31,6 +31,23 @@ function describeInvalidId(method, path, content) {
         })
     })
 }
+function specInvalidId(method, path, content) {
+        let res
+        before((done) => {
+            api[method](path).send(content).then(($res) => {
+                res = $res
+                done()
+            })
+        })
+        it('http status', () => {
+            expect(res.statusCode).to.equal(400)
+        })
+        it('error message', () => {
+            expect(res.body.error).to.contain('must be a single String')
+            expect(res.body.error).to.contain('12 bytes')
+            expect(res.body.error).to.contain('24 hex characters')
+        })
+}
 
 let Order
 
@@ -102,7 +119,7 @@ module.exports = function store() {
                     expect(resOrder).to.have.property('links')
                 })
             })
-            describe('put', () => {
+            describe('put additions', () => {
                 let res
                 let ids = { }
                 before( async () => {
@@ -115,7 +132,7 @@ module.exports = function store() {
                 describe('error when', () => {
 
                 })
-                describe('pending no additions', () => {
+                describe('pending with no additions', () => {
                     let update = { order: { additions: 'low' } }
                     before((done) => {
                         api.put('/orders/' + ids.latte.toString()).send(update).then(($res) => {
@@ -141,7 +158,7 @@ module.exports = function store() {
                         })
                     })
                 })
-                describe('pending more additions', () => {
+                describe('pending with more additions', () => {
                     let id
                     let res
                     let additions = { order: { additions: 'low tir cin' } }
@@ -190,6 +207,9 @@ module.exports = function store() {
                     it('http status', () => {
                         expect(res.statusCode).to.equal(404)
                     })
+                })
+                describe('invalid id', () => {
+                    specInvalidId('put', '/orders/99', { order: { additions: 'tor' } })
                 })
                 // describeInvalidId('put', '/orders/' + '99', 'put')
              })
