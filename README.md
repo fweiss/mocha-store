@@ -46,13 +46,13 @@ Guidelines:
 > then there's a lot of fake-dao code. 
 > That's not only duplicate code, but code that may give false positives, 
 > that is, pass in domain, but not in integration or acceptance.
-> The issue appears to be that there's more logic in the mongoos-dao than 
+> The issue appears to be that there's more logic in the mongoose-dao than 
 > originally expected and a tighter coupling between the service and dao
 > layers with respect to exception handling.
 > Clearly the service layer is responsible for turning dao execptions into
 > HTTP status code and responses.
 > These exceptions may be better to exercise with a fake, but then it
-> comes bake to having a faithful fake that doesn't produce false positives.
+> comes back to having a faithful fake that doesn't lead to false positives.
 > For example, the deleteOrder method in the dao is now responsible for 
 > both checking for valid id encapsulation and checking the query for 
 > zero deleted documents.
@@ -62,6 +62,8 @@ Guidelines:
 > Testing the dao layer has also be considered, but that seems to also
 > introduce duplicates/overlap/sync problems as the integration
 > between the service and dao layers is the principle focus of testing.
+> Another idea being considered is to use the fake-dao only to create
+> exceptions that would be difficult to reproduce via the mongoose-dao.
 
 ### Domain (unit) tests
 For Domain tests, the focus is on testing:
