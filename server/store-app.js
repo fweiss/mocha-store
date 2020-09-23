@@ -103,6 +103,7 @@ module.exports = function(dao) {
         //     return sendErrorStatusMessage(res, 400, 'invalid order status')
         // }
         // var updatedOrder = _.extend({ price: '4.00' }, defaultOrder, req.body.order)
+
         try {
             const result = await dao.updateOrder(req.params.orderId, req.body.order)
             res.status(200)
@@ -110,6 +111,9 @@ module.exports = function(dao) {
         }
         catch (err) {
             res.status(500)
+            if (err instanceof NotFoundError) {
+                res.status(404)
+            }
             if (err instanceof InvalidStateError) {
                 res.status(409)
             }

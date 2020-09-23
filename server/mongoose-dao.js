@@ -1,4 +1,4 @@
-let { NotFoundError, InvalidParameterError} = require('./common-dao.js')
+let { NotFoundError, InvalidParameterError, InvalidStateError } = require('./common-dao.js')
 
 const schemas = require('../server/schemas')
 
@@ -53,6 +53,14 @@ module.exports = {
     },
     updateOrder: async (orderId, updateOrder) => {
         const id = getIdObject(orderId)
+
+        const query1 = await Order.findById(id)
+        if (query1 === null) {
+            throw new NotFoundError('order not found')
+        }
+        if (query1._doc.status === 'COMPLETED') {
+            throw new InvalidStateError('order is completed')
+        }
         const query = await Order.updateOne({ _id: id }, updateOrder)
         // todo check query.nModifiedß, ok, n
         return

@@ -144,7 +144,7 @@ module.exports = function store() {
                 describe('pending more additions', () => {
                     let id
                     let res
-                    let additions = { order: { additions: 'low tir' } }
+                    let additions = { order: { additions: 'low tir cin' } }
                     before(() => {
                         id = ids.mocha
                     })
@@ -160,11 +160,38 @@ module.exports = function store() {
                             query = await Order.findById(id)
                         })
                         it('has more additions', () => {
-                            expect(query._doc.additions).to.equal('low tir')
+                            expect(query._doc.additions).to.equal('low tir cin')
                         })
                     })
                 })
-                // describeInvalidId('put', '/orders/' + '99', update)
+                describe('completed', () => {
+                    let addition = { order: { additions: 'tor' }}
+                    let id
+                    let res
+                    before(() => { id = ids.americano })
+                    before(async () => {
+                        res = await api.put('/orders/' + id.toString()).send(addition)
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(409)
+                    })
+                    it('error message', () => {
+                        // expect(res.body.error).to.contain('illegal state')
+                        expect(res.body.error).to.contain('order is completed')
+                    })
+                })
+                describe('non existing', () => {
+                    let id = '123456789012345678901234'
+                    let additions = { order: { additions: 'tor' } }
+                    let res
+                    before(async () => {
+                        res = await api.put('/orders/' + id).send(additions)
+                    })
+                    it('http status', () => {
+                        expect(res.statusCode).to.equal(404)
+                    })
+                })
+                // describeInvalidId('put', '/orders/' + '99', 'put')
              })
             describe('get collection', () => {
                 let order
