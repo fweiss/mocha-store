@@ -46,6 +46,7 @@ module.exports = {
         }
         return o.toObject()
     },
+    // maybe use findOneAndUpdate()?
     updateOrder: async (orderId, updateOrder) => {
         const id = getObjectId(orderId)
 
@@ -56,9 +57,19 @@ module.exports = {
         if (statusQuery._doc.status === 'COMPLETED') {
             throw new InvalidStateError('order is completed')
         }
-        const updateQuery = await Order.updateOne({ _id: id }, updateOrder)
-        // todo check query.nModifiedß, ok, n
-        return
+
+        options = {
+            runValidators: true
+        }
+        try {
+            return await Order.updateOne({ _id: id }, updateOrder, options)
+        }
+        catch (err) {
+            throw new InvalidParameterError(err)
+        }
+        // const updateQuery = await Order.updateOne({ _id: id }, updateOrder, options)
+        // // todo check query.nModifiedß, ok, n
+        // return
     },
     deleteOrder: async (orderId) => {
         const id = getObjectId(orderId)

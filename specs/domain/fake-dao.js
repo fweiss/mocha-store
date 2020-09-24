@@ -9,7 +9,7 @@
 // const NotFoundError = require('../server/common-dao.js')
 // const InvalidParameterError = require('../server/common-dao.js')
 
-let { NotFoundError, InvalidParameterError} = require('../../server/common-dao.js')
+let { NotFoundError, InvalidParameterError, InvalidStateError } = require('../../server/common-dao.js')
 
 module.exports = {
 
@@ -43,9 +43,9 @@ module.exports = {
         }
     },
     updateOrder: async (orderId, updatedOrder) => {
-        if (orderId === 2) {
-            throw new InvalidStateError('order have already been completed')
-        }
-        return { order: { drink: 'latte', additions: 'tor' }}
+        // if (orderId === '2') {
+        //     throw new InvalidStateError('order have already been completed')
+        // }
+        return { order: { drink: 'latte', additions: 'tor', price: '4.00' }}
     },
 }

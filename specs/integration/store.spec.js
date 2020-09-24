@@ -100,30 +100,49 @@ module.exports = function store() {
                 it('http status', () => {
                     expect(res.statusCode).to.be(201)
                 })
-                it('confirm drink', (done) => {
-                    Order.find({_id: id}, 'drink cost').then(function (orders) {
-                        expect(orders.length).to.be(1)
-                        expect(orders[0].drink).to.be('mocha')
-                        done()
-                    }).catch(function (err) {
-                        done(err)
+                describe('response', () => {
+                    it('has price', () => {
+                        // fixme price comes from post or db?
+                        // currenlty hardwired in dao
+                        expect(res.body.order.cost).to.equal('3.33')
+                    })
+                    it("hyperlinks present", () => {
+                        expect(resOrder).to.have.property('links')
                     })
                 })
-                it("hyperlinks present", () => {
-                    expect(resOrder).to.have.property('links')
+                describe('database', () => {
+                    let orders
+                    before(async () => {
+                        orders = await Order.find({_id: id}, 'drink cost status')
+                    })
+                    it('is added', () => {
+                        expect(orders.length).to.equal(1)
+                    })
+                    it('has drink', ()  => {
+                        expect(orders[0].drink).to.equal('mocha')
+                    })
+                    it('has price', ()  => {
+                        expect(orders[0].cost).to.equal('3.33')
+                    })
+                    it('status pending', ()  => {
+                        expect(orders[0].status).to.equal('PENDING')
+                    })
                 })
             })
+
+            // PUT
+
             describe('put', () => {
+                let ids = { }
+                before( async () => {
+                    ids = await dataFixture([
+                        { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
+                        { drink: 'mocha', cost: '4.30', additions: 'nut', status: 'PENDING' },
+                        { drink: 'americano', cost: '2.30', additions: '', status: 'COMPLETED' },
+                    ])
+                })
                 describe('additions', () => {
                     let res
-                    let ids = { }
-                    before( async () => {
-                        ids = await dataFixture([
-                            { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
-                            { drink: 'mocha', cost: '4.30', additions: 'nut', status: 'PENDING' },
-                            { drink: 'americano', cost: '2.30', additions: '', status: 'COMPLETED' },
-                        ])
-                    })
                     describe('pending', () => {
                         describe('with no additions', () => {
                             let update = { order: { additions: 'low' } }
@@ -203,6 +222,39 @@ module.exports = function store() {
                         specInvalidId('put', '/orders/99', { order: { additions: 'tor' } })
                     })
                     // describeInvalidId('put', '/orders/' + '99', 'put')
+                })
+                describe('status', () => {
+                    // todo use non-shared data fixture
+                    let id
+                    before(() => { id = ids.mocha})
+                    describe('invalid', () => {
+                        let res
+                        before(async () => {
+                            res = await api.put('/orders/' + id.toString()).send({ order: { status: 'xxx'} })
+                        })
+                        it('http status', async () => {
+                            expect(res.statusCode).to.equal(400)
+                        })
+                        describe('response', () => {
+                            it('error message', () => {
+                                expect(res.body.error).to.contain('ValidationError')
+                                // expect(res.body.error).to.contain('status: \'xxx\'')
+                            })
+                        })
+                    })
+                    describe('completed', () => {
+                        let res
+                        before(async () => {
+                            res = await api.put('/orders/' + id.toString()).send({ order: { status: 'COMPLETED'} })
+                        })
+                        it('http status', async () => {
+                            expect(res.statusCode).to.equal(200)
+                        })
+                        it('database', async () => {
+                            let query = await Order.findById(id)
+                            expect(query.toObject().status).to.equal('COMPLETED')
+                        })
+                    })
                 })
             })
             describe('get collection', () => {
