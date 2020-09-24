@@ -63,7 +63,7 @@ async function dataFixture(models) {
 
 module.exports = function store() {
 
-    describe('store', function () {
+    describe('orders', function () {
         // const app = require('../../server/store-app.js')(dao)
         // var api = request(app);
         var americanoId
@@ -81,7 +81,6 @@ module.exports = function store() {
             await mongoServer.stop()
         })
 
-        describe('orders', () => {
             const nonexistingOrderId = '123456789012345678901234'
 
             describe('post', () => {
@@ -389,5 +388,4 @@ module.exports = function store() {
                 })
             })
         })
-    })
 }

@@ -171,7 +171,7 @@ module.exports = function order() {
                     })
                 })
                 describe('status preparing', function () {
-                     describe('response', function () {
+                    describe('response', function () {
                         var res
                         beforeEach(function (done) {
                             const orderUpdate = {order: {status: 'preparing'}}
@@ -246,35 +246,6 @@ module.exports = function order() {
 
                     })
 
-                })
-            })
-            describe('delete', () => {
-                describe('non existing', () => {
-                    let res
-                    before((done) => {
-                        api.delete('/orders/1').then(($res) => {
-                            res = $res
-                            done()
-                        })
-                    })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(404)
-                    })
-                    it('error message', () => {
-                        expect(res.body.error).to.contain('order not found')
-                    })
-                })
-                describe('existing', () => {
-                    let res;
-                    before((done) => {
-                        api.delete('/orders/2').then(($res) => {
-                            res = $res
-                            done()
-                        })
-                    })
-                    it('http status', () => {
-                        expect(res.statusCode).to.equal(204)
-                    })
                 })
             })
         })

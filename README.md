@@ -65,6 +65,14 @@ Guidelines:
 > Another idea being considered is to use the fake-dao only to create
 > exceptions that would be difficult to reproduce via the mongoose-dao.
 
+> Update: Starting to get the idea that what was the 'domain' suite
+> was mostly testing the functioning of the service layer that didn't involve
+> integration with the dao layer. This is: request validation (before the dao
+> layer is invoked) and response decoration (the headers and hyperlinks).
+> There may still need to be a separate suite for testing hard to duplicate
+> errors arising in the dao layer, which can more easily be faked in the 
+> fake-dao. 
+
 ### Domain (unit) tests
 For Domain tests, the focus is on testing:
 - app code that routes and handles requests
