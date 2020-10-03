@@ -13,10 +13,6 @@ module.exports = function(dao) {
 
     var host = 'http://localhost:8001';
 
-    var defaultOrder = {
-        drink: 'latte'
-    }
-
     app.use(require('body-parser').json())
 
     function sendErrorStatusMessage(res, status, message, $examples) {
