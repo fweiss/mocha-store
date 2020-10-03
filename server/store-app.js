@@ -43,7 +43,13 @@ module.exports = function(dao) {
             self: { uri: '/orders/' + result._id },
             payment: { uri: '/payment/order/' + result._id }
         }
-        res.location(req.protocol + '://' + req.hostname + ':' + req.connection.localPort + '/orders/' + result._id)
+
+        // todo finish extracting host
+        const hostBase = req.protocol + '://' + req.hostname + ':' + req.connection.localPort
+        const url = new URL('/orders/' + result._id, hostBase)
+        res.location(url.href)
+        // res.location(req.protocol + '://' + req.hostname + ':' + req.connection.localPort + '/orders/' + result._id)
+
         res.status(201)
         res.send(response)
     })
