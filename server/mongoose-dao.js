@@ -38,7 +38,10 @@ module.exports = {
             console.log('disconnected')
         })
 
-        await mongoose.connect(uri)
+        let options = {
+            serverSelectionTimeoutMS: 10
+        }
+        await mongoose.connect(uri, options)
         const orderScheme = new mongoose.Schema(schemas.orderSchema)
         Order = mongoose.model('Order', orderScheme)
     },
