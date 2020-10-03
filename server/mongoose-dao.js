@@ -15,7 +15,7 @@ function getObjectId(id) {
 
 module.exports = {
 
-    connect: async (_mongoose, uri) => {
+    connect: async (_mongoose, uri, options) => {
         mongoose = _mongoose
 
         // to suppress deprecation warnings
@@ -38,10 +38,7 @@ module.exports = {
             console.log('disconnected')
         })
 
-        let options = {
-            serverSelectionTimeoutMS: 10
-        }
-        await mongoose.connect(uri, options)
+        await mongoose.connect(uri, options || {})
         const orderScheme = new mongoose.Schema(schemas.orderSchema)
         Order = mongoose.model('Order', orderScheme)
     },

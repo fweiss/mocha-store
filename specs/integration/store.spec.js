@@ -73,7 +73,10 @@ module.exports = function store() {
             let mongoUri = await mongoServer.getUri()
             // mongoUri = 'mongodb://127.0.0.2:55663/53c937e4-4296-4769-9174-70a4af08b58b?'
 
-            let connection = dao.connect(mongoose, mongoUri)
+            let options = {
+                serverSelectionTimeoutMS: 10
+            }
+            let connection = dao.connect(mongoose, mongoUri, options)
             connection.catch((err) => {
                 console.log(err)
             })
