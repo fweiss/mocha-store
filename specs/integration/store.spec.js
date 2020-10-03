@@ -71,12 +71,17 @@ module.exports = function store() {
         before(async () => {
             mongoServer = new MongoMemoryServer()
             let mongoUri = await mongoServer.getUri()
-            // mongoUri = 'mongodb://127.0.0.2:55663/53c937e4-4296-4769-9174-70a4af08b58b?'
+            mongoUri = 'mongodb://127.0.0.2:55663/53c937e4-4296-4769-9174-70a4af08b58b?'
 
-            await dao.connect(mongoose, mongoUri)
-                .then(async () => {
-                    Order = await mongoose.model('Order')
-                })
+            let connection = dao.connect(mongoose, mongoUri)
+            return connection.then(async () => {
+                Order = await mongoose.model('Order')
+            })
+
+            // await dao.connect(mongoose, mongoUri)
+            //     .then(async () => {
+            //         Order = await mongoose.model('Order')
+            //     })
         })
         after(async () => {
             await mongoose.disconnect()
