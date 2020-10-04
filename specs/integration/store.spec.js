@@ -11,6 +11,8 @@ const dao = require('../../server/mongoose-dao.js')
 const app = require('../../server/store-app.js')(dao)
 var api = request(app);
 
+let Order
+
 // helper function to test error responce for invalid docuement id
 function describeInvalidId(method, path, content) {
     describe('invalid id', () => {
@@ -43,8 +45,6 @@ function specInvalidId(method, path, content) {
     })
 }
 
-let Order
-
 // helper to initialize db with the given order models
 // and return the respective document ids
 async function dataFixture(models) {
@@ -62,6 +62,42 @@ async function dataFixture(models) {
 }
 
 module.exports = function store() {
+
+    describe('database connection', async () => {
+        let mongoUri
+        before(async () => {
+            mongoServer = new MongoMemoryServer()
+            mongoUri = await mongoServer.getUri()
+        })
+        after(async () => {
+            await mongoose.disconnect()
+            await mongoServer.stop()
+        })
+        it('use url', () => {
+
+            mongoUri = 'mongodb://127.0.0.2:55663/53c937e4-4296-4769-9174-70a4af08b58b?'
+            let options = {
+                serverSelectionTimeoutMS: 100
+            }
+            return dao.connect(mongoose, mongoUri, options)
+                .then(() => {
+                    return Promise.reject('Expected method to reject.');
+                })
+                .catch((err) => {
+                    // assert.isDefined(err);
+                    // done();
+                    if (typeof err === 'string') {
+                        return Promise.reject(new Error(err));
+                    }
+                    return Promise.resolve(err);
+                })
+                .then((err) => {
+                    expect(err).to.not.be.undefined
+                    // assert.isDefined(err);
+                });
+
+        })
+    })
 
     describe('orders', function () {
         // const app = require('../../server/store-app.js')(dao)
