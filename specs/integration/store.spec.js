@@ -81,11 +81,9 @@ module.exports = function store() {
             }
             return dao.connect(mongoose, mongoUri, options)
                 .then(() => {
-                    return Promise.reject('Expected method to reject.');
+                    return Promise.reject('expected mongodb connect to fail');
                 })
                 .catch((err) => {
-                    // assert.isDefined(err);
-                    // done();
                     if (typeof err === 'string') {
                         return Promise.reject(new Error(err));
                     }
@@ -93,7 +91,8 @@ module.exports = function store() {
                 })
                 .then((err) => {
                     expect(err).to.not.be.undefined
-                    // assert.isDefined(err);
+                    expect(err.message).to.contain('timed out')
+                    expect(err.message).to.contain('Server selection')
                 });
 
         })
