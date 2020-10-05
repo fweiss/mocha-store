@@ -95,16 +95,11 @@ module.exports = function store() {
 
         describe('post', () => {
             const newOrder = {order: {drink: 'mocha', cost: '4.40'}}
-            var id
-            var resOrder
+            let putId
             let res
-            beforeEach((done) => {
-                api.post('/orders').send(newOrder).end(function (err, $res) {
-                    res = $res
-                    resOrder = res.body.order
-                    id = res.body.order._id
-                    done()
-                })
+            beforeEach(async () => {
+                res = await api.post('/orders').send(newOrder)
+                putId = res.body.order._id
             })
             it('http status', () => {
                 expect(res.statusCode).to.be(201)
@@ -116,13 +111,13 @@ module.exports = function store() {
                     expect(res.body.order.cost).to.equal('3.33')
                 })
                 it("hyperlinks present", () => {
-                    expect(resOrder).to.have.property('links')
+                    expect(res.body.order).to.have.property('links')
                 })
             })
             describe('database', () => {
                 let orders
                 before(async () => {
-                    orders = await Order.find({_id: id}, 'drink cost status')
+                    orders = await Order.find({_id: putId}, 'drink cost status')
                 })
                 it('is added', () => {
                     expect(orders.length).to.equal(1)
