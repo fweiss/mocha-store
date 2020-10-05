@@ -13,6 +13,24 @@ function getObjectId(id) {
     }
 }
 
+function traceConnection(mongoos) {
+    mongoose.connection.on('connecting', () => {
+        console.log('connecting')
+    })
+    mongoose.connection.on('connected', () => {
+        console.log('connected')
+    })
+    mongoose.connection.on('error', () => {
+        console.log('error')
+    })
+    mongoose.connection.on('disconnecting', () => {
+        console.log('disconnecting')
+    })
+    mongoose.connection.on('disconnected', () => {
+        console.log('disconnected')
+    })
+}
+
 module.exports = {
 
     connect: async (_mongoose, uri, options) => {
@@ -22,21 +40,7 @@ module.exports = {
         mongoose.set('useNewUrlParser', true)
         mongoose.set('useUnifiedTopology', true)
 
-        mongoose.connection.on('connecting', (err) => {
-            console.log('connecting')
-        })
-        mongoose.connection.on('connected', (err) => {
-            console.log('connected')
-        })
-        mongoose.connection.on('error', (err) => {
-            console.log('error')
-        })
-        mongoose.connection.on('disconnecting', (err) => {
-            console.log('disconnecting')
-        })
-        mongoose.connection.on('disconnected', (err) => {
-            console.log('disconnected')
-        })
+        // traceConnection(mongoose);
 
         await mongoose.connect(uri, options || {})
         const orderScheme = new mongoose.Schema(schemas.orderSchema)
