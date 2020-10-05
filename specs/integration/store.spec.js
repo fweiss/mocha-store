@@ -18,6 +18,9 @@ const fixtures = {
     nonexisting: {
         orderId: '123456789012345678901234'
     },
+    invalid: {
+        orderId: '99'
+    },
     additions: {
         simple: { order: { additions: 'tor' }},
     }
@@ -212,7 +215,8 @@ module.exports = function store() {
                     })
                 })
                 describe('invalid id', () => {
-                    specInvalidId('put', '/orders/99', { order: { additions: 'tor' } })
+                    const id = fixtures.invalid.orderId
+                    specInvalidId('put', '/orders/' + id, { order: { additions: 'tor' } })
                 })
             })
             describe('status', () => {
@@ -320,7 +324,8 @@ module.exports = function store() {
                 })
             })
             describe('invalid id', () => {
-                specInvalidId('get', '/orders/' + '99')
+                const id = fixtures.invalid.orderId
+                specInvalidId('get', '/orders/' + id)
             })
         })
 
@@ -362,7 +367,8 @@ module.exports = function store() {
                 })
             })
             describe('invalid id', () => {
-                specInvalidId('delete', '/orders/99')
+                const id = fixtures.invalid.orderId
+                specInvalidId('delete', '/orders/' + id)
             })
         })
     })
