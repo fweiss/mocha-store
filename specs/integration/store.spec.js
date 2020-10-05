@@ -24,22 +24,7 @@ const fixtures = {
 }
 
 // helper function to test error responce for invalid docuement id
-function describeInvalidId(method, path, content) {
-    describe('invalid id', () => {
-        let res
-        before(async () => {
-            res = await api[method](path).send(content)
-        })
-        it('http status', () => {
-            expect(res.statusCode).to.equal(400)
-        })
-        it('error message', () => {
-            expect(res.body.error).to.contain('must be a single String')
-            expect(res.body.error).to.contain('12 bytes')
-            expect(res.body.error).to.contain('24 hex characters')
-        })
-    })
-}
+// decided to leave out the describe() wrapper to make code more readable
 function specInvalidId(method, path, content) {
     let res
     before(async () => {
@@ -83,7 +68,7 @@ module.exports = function store() {
             let mongoUri = await mongoServer.getUri()
 
             let options = {
-                serverSelectionTimeoutMS: 10
+                serverSelectionTimeoutMS: 200
             }
             let connection = dao.connect(mongoose, mongoUri, options)
             connection.catch((err) => {
@@ -229,7 +214,6 @@ module.exports = function store() {
                 describe('invalid id', () => {
                     specInvalidId('put', '/orders/99', { order: { additions: 'tor' } })
                 })
-                // describeInvalidId('put', '/orders/' + '99', 'put')
             })
             describe('status', () => {
                 // todo use non-shared data fixture
@@ -335,7 +319,9 @@ module.exports = function store() {
                     expect(res.statusCode).to.equal(404)
                 })
             })
-            describeInvalidId('get', '/orders/' + '99')
+            describe('invalid id', () => {
+                specInvalidId('get', '/orders/' + '99')
+            })
         })
 
         // DELETE
@@ -375,7 +361,9 @@ module.exports = function store() {
                     expect(res.statusCode).to.equal(404)
                 })
             })
-            describeInvalidId('delete', '/orders/99')
+            describe('invalid id', () => {
+                specInvalidId('delete', '/orders/99')
+            })
         })
     })
     describe('payment', () => {
