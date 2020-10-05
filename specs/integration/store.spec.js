@@ -17,6 +17,9 @@ let Order
 const fixtures = {
     nonexisting: {
         orderId: '123456789012345678901234'
+    },
+    additions: {
+        simple: { order: { additions: 'tor' }},
     }
 }
 
@@ -54,12 +57,14 @@ function specInvalidId(method, path, content) {
 
 // helper to initialize db with the given order models
 // and return the respective document ids
-async function dataFixture(models) {
+async function databaseFixture(models) {
     return mongoose.connections[0].dropDatabase()
         .then(() => {
             return Order.insertMany(models)
         })
         .then((docs) => {
+            // TODO we can assume the ids are returned in order
+            // better to not index by drink, instead let the caller select the needed ids
             let ids = {}
             for (let model of docs) {
                 ids[model._doc.drink] = model._doc._id
@@ -95,11 +100,11 @@ module.exports = function store() {
 
         describe('post', () => {
             const newOrder = {order: {drink: 'mocha', cost: '4.40'}}
-            let putId
+            let postId
             let res
             beforeEach(async () => {
                 res = await api.post('/orders').send(newOrder)
-                putId = res.body.order._id
+                postId = res.body.order._id
             })
             it('http status', () => {
                 expect(res.statusCode).to.be(201)
@@ -117,7 +122,7 @@ module.exports = function store() {
             describe('database', () => {
                 let orders
                 before(async () => {
-                    orders = await Order.find({_id: putId}, 'drink cost status')
+                    orders = await Order.find({_id: postId}, 'drink cost status')
                 })
                 it('is added', () => {
                     expect(orders.length).to.equal(1)
@@ -139,7 +144,7 @@ module.exports = function store() {
         describe('put', () => {
             let ids = { }
             before( async () => {
-                ids = await dataFixture([
+                ids = await databaseFixture([
                     { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
                     { drink: 'mocha', cost: '4.30', additions: 'nut', status: 'PENDING' },
                     { drink: 'americano', cost: '2.30', additions: '', status: 'COMPLETED' },
@@ -196,7 +201,7 @@ module.exports = function store() {
                     })
                 })
                  describe('completed', () => {
-                    let addition = { order: { additions: 'tor' }}
+                    let addition = fixtures.additions.simple
                     let id
                     let res
                     before(() => { id = ids.americano })
@@ -207,16 +212,15 @@ module.exports = function store() {
                         expect(res.statusCode).to.equal(409)
                     })
                     it('error message', () => {
-                        // expect(res.body.error).to.contain('illegal state')
                         expect(res.body.error).to.contain('order is completed')
                     })
                 })
                 describe('non existing', () => {
                     let id = fixtures.nonexisting.orderId
-                    let additions = { order: { additions: 'tor' } }
+                    let addition = fixtures.additions.simple
                     let res
                     before(async () => {
-                        res = await api.put('/orders/' + id).send(additions)
+                        res = await api.put('/orders/' + id).send(addition)
                     })
                     it('http status', () => {
                         expect(res.statusCode).to.equal(404)
@@ -266,16 +270,13 @@ module.exports = function store() {
             let res
             let ids = {}
             before(async () => {
-                ids = await dataFixture([
+                ids = await databaseFixture([
                     { drink: 'americano', cost: '2.40', additions: '', status: 'PENDING' },
                 ])
             })
-            beforeEach((done) => {
-                api.get('/orders').end(function (err, $res) {
-                    res = $res
-                    order = res.body.orders[0]
-                    done()
-                })
+            beforeEach(async () => {
+                res = await api.get('/orders')
+                order = res.body.orders[0]
             })
             it('http status', () => {
                 expect(res.statusCode).to.equal(200)
@@ -302,7 +303,7 @@ module.exports = function store() {
                 let res
                 let ids = {}
                 before(async() => {
-                    ids = await dataFixture([
+                    ids = await databaseFixture([
                         { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
                     ])
                 })
@@ -344,7 +345,7 @@ module.exports = function store() {
         describe('delete', () => {
             let orderId
             before(async () => {
-                ids = await dataFixture([
+                ids = await databaseFixture([
                     { drink: 'latte', cost: '4.30' }
                 ])
                 orderId = ids.latte
