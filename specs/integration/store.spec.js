@@ -71,14 +71,11 @@ async function dataFixture(models) {
 module.exports = function store() {
 
     describe('orders', function () {
-        // const app = require('../../server/store-app.js')(dao)
-        // var api = request(app);
         var americanoId
 
         before(async () => {
             mongoServer = new MongoMemoryServer()
             let mongoUri = await mongoServer.getUri()
-            // mongoUri = 'mongodb://127.0.0.2:55663/53c937e4-4296-4769-9174-70a4af08b58b?'
 
             let options = {
                 serverSelectionTimeoutMS: 10
@@ -90,11 +87,6 @@ module.exports = function store() {
             return connection.then(async () => {
                 Order = await mongoose.model('Order')
             })
-
-            // await dao.connect(mongoose, mongoUri)
-            //     .then(async () => {
-            //         Order = await mongoose.model('Order')
-            //     })
         })
         after(async () => {
             await mongoose.disconnect()
