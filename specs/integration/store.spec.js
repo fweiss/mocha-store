@@ -307,16 +307,14 @@ module.exports = function store() {
                         { drink: 'latte', cost: '3.30', additions: '', status: 'PENDING' },
                     ])
                 })
-                beforeEach((done) => {
-                    api.get('/orders/' + ids.latte.toString()).then(($res) => {
-                        res = $res
-                        expect(res.statusCode).to.equal(200)
-                        expect(res.body).to.have.property('order')
-                        done()
-                    })
+                beforeEach(async () => {
+                    res = await api.get('/orders/' + ids.latte.toString())
                 })
                 it('http status', () => {
                     expect(res.statusCode).to.equal(200)
+                })
+                it('response', () => {
+                    expect(res.body).to.have.property('order')
                 })
                 describe('hyperlinks', () => {
                     it('present', () => {
