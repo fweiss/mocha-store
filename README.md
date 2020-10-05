@@ -105,6 +105,11 @@ Environment like production except:
 - acceptance test database separate from production database
 - database can be cleared and seeded from cli
 
+Running acceptance tests:
+- start the mongodb server
+- start the mocha store server
+- use a rest client, such as Postman to verify the web API
+
 ## Test spec structure
 After a first false start, the following spec structure was used. The key is to use a fluent, hierarchical structure
 that fits well with REST and hypermedia links.

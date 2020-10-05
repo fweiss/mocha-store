@@ -73,7 +73,7 @@ module.exports = function store() {
             await mongoose.disconnect()
             await mongoServer.stop()
         })
-        it('use url', () => {
+        it('error when bad address ', () => {
 
             mongoUri = 'mongodb://127.0.0.2:55663/53c937e4-4296-4769-9174-70a4af08b58b?'
             let options = {
